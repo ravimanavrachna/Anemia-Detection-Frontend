@@ -137,7 +137,7 @@ const PatientDetail = () => {
                   font-bold font-urbanist text-[1.5rem] flex justify-center items-center 
                   animate-heartbeat"
         >
-          Non Anamic
+          Non Anaemic
         </div>
       </div>
     </div>
