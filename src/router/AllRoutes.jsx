@@ -21,7 +21,9 @@ const PrivateRoute = ({ element }) => {
 const AllRoutes = () => {
   return (
     <Routes>
+      <Route path="/admin/dashboard" element={<Dashboard />} />
       <Route path="/dashboard" element={<Dashboard />} />
+
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/donor/view-donor" element={<ViewPatient />} />
