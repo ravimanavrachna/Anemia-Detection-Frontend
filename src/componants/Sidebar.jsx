@@ -1,12 +1,15 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { Home, PlusCircle, Users } from "lucide-react";
+import { Bell, Home, PlusCircle, Settings, Users } from "lucide-react";
 // import LogOutModal from "../../modal/LogOutModal";
 // import { CommonBgColor } from "../CommonStyle";
 import LogOutModal from "../modal/LogOutModal";
+import { BellIcon1 } from "./IconsSVG";
 
 const menuItems = [
+  { name: "Admin Dashboard", path: "/admin/dashboard", icon: <Home size={20} /> },
   { name: "Dashboard", path: "/dashboard", icon: <Home size={20} /> },
+
   {
     name: "Add Donor",
     path: "/donor/add-donor",
@@ -16,6 +19,16 @@ const menuItems = [
     name: "All Donor",
     path: "/donor/view-donor",
     icon: <Users size={20} />,
+  },
+  {
+    name: "Notification",
+    path: "/notificaion",
+    icon: <Bell size={20} />,
+  },
+  {
+    name: "Setting",
+    path: "/settings",
+    icon: <Settings size={20} />,
   },
 ];
 
