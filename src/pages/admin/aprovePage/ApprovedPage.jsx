@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
-import PageTitle from '../../componants/PageTitle';
-import Pagination from '../../componants/Pagination';
-import useGet from '../../hooks/useGet';
+import React, { useState } from 'react'
+import PageTitle from '../../../componants/PageTitle'
+import Pagination from '../../../componants/Pagination';
 import { useNavigate } from 'react-router';
+import useGet from '../../../hooks/useGet';
+import ApprovedModal from '../../../modal/ApprovedModal';
 
-const ViewPatient = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+const ApprovedPage = () => {
+    const [searchQuery, setSearchQuery] = useState('');
+     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('Last 30 days');
  const navigate = useNavigate()
+
+ const [approved , setApproved] = useState(false)
 
 
   const limit = pageSize;
@@ -22,11 +26,10 @@ const ViewPatient = () => {
     donor.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const paginatedDonors = searchedDonors.slice(offset, offset + limit);
-
   return (
     <div>
-      <PageTitle title="All Donor" />
-
+      <PageTitle title="Approved"/>
+      
       <div className="relative  shadow-md sm:rounded-lg bg-white py-10 mt-4 px-4 mb-10">
         <div className="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0  sm:items-center justify-between pb-4">
           {/* Filter Dropdown */}
@@ -104,28 +107,34 @@ const ViewPatient = () => {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th className="p-4">S. No.</th>
-              <th className="px-6 py-3">Patient Name</th>
+              <th className="px-6 py-3">Doctor's Name</th>
               <th className="px-6 py-3">Date</th>
-              <th className="px-6 py-3">Donor ID</th>
-              <th className="px-6 py-3">Age</th>
-              <th className="px-6 py-3">Sex</th>
-              <th className="px-6 py-3">Blood Group</th>
-              <th className="px-6 py-3">HB Levels</th>
+              <th className="px-6 py-3">Doctor ID</th>
+              <th className="px-6 py-3">Block</th>
+              <th className="flex justify-center px-6 py-3">Request</th>
             </tr>
           </thead>
           <tbody>
 
           
             {paginatedDonors.map((donor, index) => (
-              <tr key={donor.id} onClick={() =>navigate(`/donor/donor-detail/${donor.donorID}`)} className="bg-white border-b hover:bg-gray-50">
+              <tr className="bg-white border-b hover:bg-gray-50">
                 <td className="px-6 py-4">{offset + index + 1}</td>
                 <td className="px-6 py-4">{donor.name || '-'}</td>
                 <td className="px-6 py-4">{donor.date || '-'}</td>
                 <td className="px-6 py-4">{donor.donorID || '-'}</td>
                 <td className="px-6 py-4">{donor.age || '-'}</td>
-                <td className="px-6 py-4">{donor.sex || '-'}</td>
-                <td className="px-6 py-4">{donor.bloodGroup || '-'}</td>
-                <td className="px-6 py-4">{donor.hBValue || '-'}</td>
+                <td className="px-6 py-4  ">
+                  { approved ? <button className='px-4 py-1 bg-green-500 rounded-md text-white '>Approved</button> : <div className='flex gap-4 justify-center items-center'>
+                    <button onClick={() => {
+                      setIsLogoutModalOpen(true);
+                  }} 
+                  className='px-4 py-1 bg-green-500 rounded-md text-white '>Yes</button>
+                  <button className='px-4 py-1 bg-red-500 rounded-md text-white '>No</button>
+                  </div>
+                  }
+                </td>
+          
               </tr>
             ))}
           </tbody>
@@ -139,8 +148,12 @@ const ViewPatient = () => {
           onPageChange={setCurrentPage}
         />
       </div>
+      {isLogoutModalOpen && (
+        <ApprovedModal isOpen={isLogoutModalOpen} setIsOpen={setIsLogoutModalOpen} />
+      )}
+         
     </div>
-  );
-};
+  )
+}
 
-export default ViewPatient;
+export default ApprovedPage

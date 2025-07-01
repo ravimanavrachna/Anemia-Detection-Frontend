@@ -37,9 +37,13 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className='w-full grid grid-cols-3 py-6 z-50'>
-        <div className=''>
-          <div className='bg-white py-2 pl-2 rounded-xl w-[80%] flex justify-start items-center gap-4'>
+    <div className='w-full flex justify-between items-center lg:grid lg:grid-cols-3 py-2 sm:py-4  lg:py-6 z-50'>
+        
+        <div className='flex '>
+          <div className='lg:hidden block text-white'>
+          Blood Camp
+        </div>
+          <div className='bg-white hidden md:block py-2 pl-2 rounded-xl w-[80%] md:flex justify-start items-center gap-4'>
               <div><SearchIcon/></div>
               <div className='text-[#830709] w-full'>
                 <input type="text" className='text-[#830709] w-[100%] border-none outline-none' placeholder='Search here' />
@@ -47,13 +51,13 @@ const Navbar = () => {
                 </div>
           </div>
         </div>
-        <div className=' flex items-center justify-end gap-6'>
+        <div className='md:block md:flex items-center justify-end gap-6 hidden'>
           <div><BellIcon/></div>
           <div><QuestionMarkIcon/></div>
           <div><SettingIcon/></div>
         </div>
-        <div className=' flex gap-3 justify-end pr-10 items-center'>
-        <div>
+        <div className=' flex gap-3 justify-end pr items-center'>
+        <div className='text-white lg:text-black'>
           Ravi Rana
         </div>
 

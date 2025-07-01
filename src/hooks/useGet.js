@@ -10,10 +10,16 @@ const useGet = (url, { params = {}, query = {}, headers = {} } = {}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const token = sessionStorage.getItem("authToken"); // ✅ Token get karo
+
         const response = await axios.get(`${apiHost}/${url}`, {
           params: { ...params, ...query },
-          headers,
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ Token add karo
+            ...headers, // ✅ User-defined headers ko merge karo
+          },
         });
+
         setData(response.data);
       } catch (err) {
         setError(err.message);

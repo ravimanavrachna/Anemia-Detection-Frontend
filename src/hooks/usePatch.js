@@ -11,20 +11,26 @@ const usePatch = (url) => {
   const patchData = async (data) => {
     try {
       setLoading(true);
-      const response = await axios.patch(`${apiHost}/${url}`, data);
-      console.log("In the try catch",response)
-      setResponseData(response?.data);
-      return response?.data
-    } catch (err) {
-      console.log("In HOok error :",err)
+      const token = sessionStorage.getItem("authToken"); // ✅ Token get karo
 
+      const response = await axios.patch(`${apiHost}/${url}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ Token header me bhejo
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("In the try catch", response);
+      setResponseData(response?.data);
+      return response?.data;
+    } catch (err) {
+      console.log("In HOok error :", err);
       setError(err);
-      return(err)
+      return err;
     } finally {
       setLoading(false);
     }
   };
-
 
   return { patchData, loading, error, responseData };
 };

@@ -12,7 +12,14 @@ const usePost = (url) => {
       setLoading(true);
       setError(null); // Reset error state
 
-      const response = await axios.post(`${apiHost}/${url}`, data);
+      const token = sessionStorage.getItem("authToken"); // ✅ Get token from localStorage
+
+      const response = await axios.post(`${apiHost}/${url}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ Add token to Authorization header
+          "Content-Type": "application/json",
+        },
+      });
 
       setResponseData(response.data);
       return response.data; // ✅ API response return kar raha hoon

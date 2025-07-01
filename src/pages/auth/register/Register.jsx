@@ -1,48 +1,47 @@
 import React, { useState } from 'react';
 import loginImg from '../../../assets/loginimg.png';
-import InputField from '../../../componants/InputField'; // Reuse the floating input field component
+import InputField from '../../../componants/InputField';
 import { useNavigate } from 'react-router';
+import usePost from '../../../hooks/usePost';
 
 const Register = () => {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { postData, loading } = usePost('api/auth/register');
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     createPassword: '',
     confirmPassword: '',
-    number: '',
+    block:'',
+    mobile: '',
   });
 
   const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+    setFormError('');
   };
 
   const validateField = (field) => {
     const value = formData[field];
     let message = '';
 
-    if (field === 'name' && !value.trim()) {
-      message = 'Name is required.';
-    }
-
+    if (field === 'name' && !value.trim()) message = 'Name is required.';
     if (field === 'email') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!value) message = 'Email is required.';
       else if (!emailRegex.test(value)) message = 'Enter a valid email.';
     }
-
     if (field === 'createPassword') {
       if (!value) message = 'Password is required.';
       else if (value.length < 6) message = 'Must be at least 6 characters.';
     }
-
-    if (field === 'confirmPassword') {
-      if (value !== formData.createPassword) message = 'Passwords do not match.';
-    }
-
-    if (field === 'number') {
+    if (field === 'confirmPassword' && value !== formData.createPassword)
+      message = 'Passwords do not match.';
+    if (field === 'mobile') {
       const numberRegex = /^[0-9]{10}$/;
       if (!value) message = 'Mobile number is required.';
       else if (!numberRegex.test(value)) message = 'Enter a valid 10-digit number.';
@@ -51,93 +50,140 @@ const Register = () => {
     setErrors((prev) => ({ ...prev, [field]: message }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const fields = ['name', 'email', 'createPassword', 'confirmPassword', 'mobile'];
+    let tempErrors = {};
+    fields.forEach((field) => {
+      validateField(field);
+      if (!formData[field]) tempErrors[field] = `${field} is required.`;
+    });
 
-    const fields = ['name', 'email', 'createPassword', 'confirmPassword', 'number'];
-    fields.forEach((field) => validateField(field));
+    const hasErrors = Object.values({ ...errors, ...tempErrors }).some((err) => err);
+    if (hasErrors) return;
 
-    const hasErrors = Object.values(errors).some((err) => err);
-    if (!hasErrors) {
-      console.log('Form Data:', formData);
-      navigate("/login")
-      alert('Registered successfully!');
+    const doctorID = Math.random().toString(36).substring(2, 10).toUpperCase();
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      password: formData.createPassword,
+      mobile: formData.mobile,
+      doctorID,
+      userType: '2',
+      block:formData.block
+    };
+
+    const result = await postData(payload);
+    console.log("aaaaaaa" ,  result)
+
+    if (result?.error) {
+      setFormError(result.error.error || 'Registration failed. Please try again.');
+    } else {
+      // alert('Registered successfully!');
+      navigate('/otp', { state: { mobile: formData.mobile } });
     }
   };
 
   return (
-    <div className="bg-red-600 flex h-[100vh] justify-center items-center px-20 ">
-      <div className="w-full max-w-full bg-white h-[80vh] rounded-3xl shadow-lg flex flex-col md:flex-row overflow-hidden">
-        
-        {/* Left Side */}
-        <div className="md:w-1/2 bg-[#FFE5E5] flex flex-col justify-center items-center p-6">
-          <img src={loginImg} alt="Login Illustration" className="w-[80%] max-w-xs mb-4" />
-          <h1 className="text-[30px] md:text-[40px] font-bold font-urbanist text-red-500">WELCOME BACK!</h1>
-          <p className="text-center text-base mt-2 font-urbanist">To keep connected, please login or </p>
-          <p className="text-center text-base mt-2 font-urbanist"> sign up by filling in your details.</p>
-          <button onClick={()=>navigate("/login")} className="mt-6 bg-red-500 text-white px-6 py-2 rounded-md font-semibold hover:bg-red-600 transition">Login</button>
+    <div className="bg-gradient-to-tr from-red-100 to-red-300 min-h-screen flex items-center justify-center p-6">
+      <div className="bg-white shadow-2xl rounded-3xl overflow-hidden w-full max-w-5xl flex flex-col md:flex-row">
+        {/* Left - Image & Welcome */}
+        <div className="md:w-1/2 bg-[#ffe5e5] flex flex-col items-center justify-center p-8">
+          <img src={loginImg} alt="Welcome" className="w-4/5 max-w-xs mb-6 animate-fade-in" />
+          <h2 className="text-3xl font-bold text-red-500 font-urbanist">Welcome Back!</h2>
+          <p className="text-center mt-3 text-gray-700">Already have an account?</p>
+          <button
+            onClick={() => navigate('/login')}
+            className="mt-5 bg-red-500 text-white px-8 py-2 rounded-lg hover:bg-red-600 transition-all"
+          >
+            Login
+          </button>
         </div>
 
-        {/* Right Side */}
-        <div className="md:w-1/2 w-full p-6 md:p-10 flex flex-col justify-center items-center">
-          <h1 className="text-[32px] md:text-[40px] font-bold text-red-500 mb-6 text-center">Register</h1>
-          <form onSubmit={handleSubmit} className="w-full px-10 flex flex-col gap-4">
-            <div className=" flex flex-col gap-4">
-              <InputField
-                id="name"
-                label="Name"
-                type="text"
-                value={formData.name}
-                onChange={handleChange}
-                onBlur={() => validateField('name')}
-                error={errors.name}
-              />
-              <InputField
-                id="email"
-                label="Email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                onBlur={() => validateField('email')}
-                error={errors.email}
-              />
-              <InputField
-                id="createPassword"
-                label="Create Password"
-                type="password"
-                value={formData.createPassword}
-                onChange={handleChange}
-                onBlur={() => validateField('createPassword')}
-                error={errors.createPassword}
-              />
-              <InputField
-                id="confirmPassword"
-                label="Confirm Password"
-                type="password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                onBlur={() => validateField('confirmPassword')}
-                error={errors.confirmPassword}
-              />
-              <InputField
-                id="number"
-                label="Mobile No."
-                type="text"
-                value={formData.number}
-                onChange={handleChange}
-                onBlur={() => validateField('number')}
-                error={errors.number}
-              />
+        {/* Right - Registration Form */}
+        <div className="md:w-1/2 w-full p-8">
+          <h2 className="text-4xl text-red-500 font-bold text-center mb-6">Create Account</h2>
+          <form onSubmit={handleSubmit} className="space-y-6 ">
+            <InputField
+              id="name"
+              label="Full Name"
+              type="text"
+              value={formData.name}
+              onChange={handleChange}
+              onBlur={() => validateField('name')}
+              error={errors.name}
+            />
+            <InputField
+              id="email"
+              label="Email Address"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              onBlur={() => validateField('email')}
+              error={errors.email}
+            />
+            <div className=' lg:flex flex flex-col  gap-4'>
+            <InputField
+              id="createPassword"
+              label="Password"
+              type="password"
+              value={formData.createPassword}
+              onChange={handleChange}
+              onBlur={() => validateField('createPassword')}
+              error={errors.createPassword}
+            />
+            <InputField
+              id="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              onBlur={() => validateField('confirmPassword')}
+              error={errors.confirmPassword}
+            />
             </div>
+            <InputField
+              id="mobile"
+              label="Mobile Number"
+              type="text"
+              value={formData.mobile}
+              onChange={handleChange}
+              onBlur={() => validateField('mobile')}
+              error={errors.mobile}
+            />
+                      <div>
+            {/* <label htmlFor="block" className="block text-sm font-medium text-gray-700">
+              Select Block
+            </label> */}
+            <select
+              id="block"
+              value={formData.block}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-md border border-gray-300 py-3 px-2 text-gray-500  focus:border-red-500 focus:ring-red-500 sm:text-sm"
+            >
+              <option value="A">Block A</option>
+              <option value="B">Block B</option>
+              <option value="C">Block C</option>
+              <option value="D">Block D</option>
+            </select>
+          </div>
+            
+
+            {formError && <p className="text-red-500 text-sm">{formError}</p>}
+
             <button
               type="submit"
-              className="w-full py-2 bg-red-500 text-white rounded-md font-semibold hover:bg-red-600 transition"
+              disabled={loading}
+              className={`w-full mt-4 py-3 font-semibold rounded-md transition-all ${
+                loading
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-red-500 text-white hover:bg-red-600'
+              }`}
             >
-              Register
+              {loading ? 'Registering...' : 'Register'}
             </button>
           </form>
         </div>
-
       </div>
     </div>
   );

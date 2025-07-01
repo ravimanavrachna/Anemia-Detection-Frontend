@@ -1,26 +1,27 @@
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import React, { useState } from 'react';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
-const ImageUploadBox = ({ label }) => {
+const ImageUploadBox = ({ label, onFileSelect = () => {} }) => {
   const [image, setImage] = useState(null);
+
+  const handleFile = (file) => {
+    if (file) {
+      setImage(URL.createObjectURL(file));
+      onFileSelect(file);
+    }
+  };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      setImage(URL.createObjectURL(file));
-    }
+    handleFile(e.dataTransfer.files[0]);
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(URL.createObjectURL(file));
-    }
-  };
+  const handleChange = (e) => handleFile(e.target.files[0]);
 
-  const handleRemove = () => {
+  const handleRemove = (e) => {
+    e.stopPropagation();
     setImage(null);
+    onFileSelect(null);
   };
 
   return (
@@ -33,11 +34,7 @@ const ImageUploadBox = ({ label }) => {
       >
         {image ? (
           <div className="relative w-full">
-            <img
-              src={image}
-              alt="preview"
-              className=" w-full rounded-lg"
-            />
+            <img src={image} alt="preview" className="w-full rounded-lg" />
             <button
               onClick={handleRemove}
               className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm"
@@ -46,33 +43,30 @@ const ImageUploadBox = ({ label }) => {
             </button>
           </div>
         ) : (
-          <span className=" text-gray-400">
-
-
-
-    <DotLottieReact
-      className='w-[20rem] overflow-hidden'
-      src="https://lottie.host/0123dc9b-f86e-4925-8b23-8bc549103c3e/53srl3Ac8v.lottie"
-      loop
-      autoplay
-    />
-
-
-
-          </span>
+          <DotLottieReact
+            className="w-[10rem] h-[10rem]"
+            src="https://lottie.host/0123dc9b-f86e-4925-8b23-8bc549103c3e/53srl3Ac8v.lottie"
+            loop
+            autoplay
+          />
         )}
         <input
           type="file"
           accept="image/*"
           id={`${label}-input`}
           className="hidden"
-          onChange={handleImageChange}
+          onChange={handleChange}
         />
       </div>
-      <button className="bg-red-600 text-white px-4 py-3 mt-3 rounded-lg w-full text-lg">Upload {label}</button>
-      {/* <p className="mt-2 text-sm font-semibold"></p> */}
+      <button
+        type="button"
+        className="bg-red-600 text-white px-4 py-2 mt-3 rounded-lg w-full text-lg"
+        onClick={() => document.getElementById(`${label}-input`).click()}
+      >
+        Upload {label}
+      </button>
     </div>
   );
 };
 
-export default ImageUploadBox
+export default ImageUploadBox;

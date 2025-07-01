@@ -1,15 +1,14 @@
 import React from 'react'
-import PageTitle from '../../componants/PageTitle'
-import { DashboardDoctorImg } from '../../componants/IconsSVG'
-import DoctorImage from '../../assets/DashboardDocterCartoon.png'
-import BloodGroupBarGraph from './BloodGroupBarGraph'
-import BloodGroupDonutChart from './BloodGroupDonutChart '
-import { HoverAnimation } from '../../componants/CommonStyle'
+import PageTitle from '../../../componants/PageTitle'
+import DoctorImage from '../../../assets/DashboardDocterCartoon.png'
+import BloodGroupBarGraph from '../../dashboard/BloodGroupBarGraph'
+import BloodGroupDonutChart from '../../dashboard/BloodGroupDonutChart '
+import { HoverAnimation } from '../../../componants/CommonStyle'
 
-const Dashboard = () => {
+const BlockPageDetails = () => {
   return (
     <div>
-        <PageTitle title="Dashboard"/>
+        <PageTitle title="Block Page Details"/>
 
         <div className='lg:flex w-full gap-4 mt-4'>
             <div className='lg:w-[60%]'>
@@ -215,4 +214,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default BlockPageDetails

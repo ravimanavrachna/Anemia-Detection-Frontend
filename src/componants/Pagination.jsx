@@ -1,5 +1,4 @@
 import React from "react";
-import { CommonBgColor } from "./CommonStyle";
 
 const Pagination = ({
   currentPage,
