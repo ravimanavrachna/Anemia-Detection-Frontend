@@ -14,6 +14,7 @@ import ApprovedPage from '../pages/admin/aprovePage/ApprovedPage';
 import BlockPage from '../pages/admin/blockPage/BlockPage';
 import AdminDashboard from '../pages/admin/adminDashboard/AdminDashboard';
 import BlockPageDetails from '../pages/admin/blockPage/BlockPageDetails';
+import ProfilePage from '../pages/profile/ProfilePage';
 
 // Function to check token security
 const isAuthenticated = () => {
@@ -47,6 +48,8 @@ const AllRoutes = () => {
       <Route path="/donor/add-donor" element={<PrivateRoute element={<AddPatient />} />} />
       <Route path="/donor/donor-detail/:donorID" element={<PrivateRoute element={<PatientDetail />} />} />
       <Route path="/setting" element={<PrivateRoute element={<PatientDetail />} />} />
+      <Route path="/profile" element={<PrivateRoute element={<ProfilePage />} />} />
+
       <Route path="/donor/add-donor/upload-palm-image" element={<PrivateRoute element={<StepOne />} />} />
       <Route path="/donor/add-donor/upload-conjunctiva-image" element={<PrivateRoute element={<StepTwo />} />} />
       <Route path="/donor/add-donor/upload-nailbde-image" element={<PrivateRoute element={<StepThree />} />} />
@@ -57,7 +60,7 @@ const AllRoutes = () => {
 
 
       {/* Catch-all route to redirect unauthenticated users */}
-      {/* <Route path="*" element={<Navigate to="/login" />} /> */}
+      <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );
 };

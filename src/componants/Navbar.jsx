@@ -104,6 +104,9 @@ const Navbar = () => {
                   onClick={() => {
                     if (item.name === "Logout") {
                       setIsLogoutModalOpen(true);
+                    } 
+                    if(item?.name === 'Profile') {
+                      navigate("/profile")
                     }
                   }}
                 >
