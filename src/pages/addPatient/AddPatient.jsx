@@ -152,8 +152,10 @@ const AddPatient = () => {
 
     
       <StepNavButtons
-        nextUrl={`/donor/donor-detail/${form?.donorID}`}
-        prevUrl='/donor/add-donor/upload-nailbde-image' // null/undefined disables the button
+        // nextUrl={`/donor/donor-detail/${form?.donorID}`}
+        nextUrl={`/donor/add-donor/upload-palm-image`}
+prevUrl={null}
+        // prevUrl='/donor/add-donor/upload-nailbde-image' // null/undefined disables the button
       />
     
 

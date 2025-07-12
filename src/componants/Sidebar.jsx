@@ -12,7 +12,7 @@ const menuItems = [
 
   {
     name: "Add Donor",
-    path: "/donor/add-donor/upload-palm-image",
+    path: "/donor/add-donor" || "/donor/add-donor/upload-palm-image" || "/donor/add-donor" ,
     icon: <PlusCircle size={20} />,
   },
   {
@@ -48,7 +48,7 @@ export default function Sidebar() {
   const [hovered, setHovered] = useState(null);
 
   return (
-    <div className="h-full overflow-hidden">
+    <div className="h-full  overflow-hidden">
 
 <div className="flex items-center mb-8 justify-center">
         <h1 className="text-[2rem] font-bold my-5 font-urbanist text-red-600">

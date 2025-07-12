@@ -7,21 +7,22 @@ const StepperProgress = () => {
   const location = useLocation();
 
   // Define route-to-step mapping
-  const stepRoutes = ['/donor/add-donor/upload-palm-image', '/donor/add-donor/upload-conjunctiva-image', '/donor/add-donor/upload-nailbde-image', '/donor/add-donor'];
+  const stepRoutes = [ '/donor/add-donor','/donor/add-donor/upload-palm-image', '/donor/add-donor/upload-conjunctiva-image', '/donor/add-donor/upload-nailbde-image'];
   const currentPath = location.pathname;
 
   // Get the index of the current step
   const currentStep = stepRoutes.indexOf(currentPath);
 
   const steps = [
-    { label: 'Palm', icon: <GiPalm className="w-6 h-6" /> },
-    { label: 'Conjunctiva', icon: <FaEye className="w-6 h-6" /> },
-    { label: 'Nailbed', icon: <FaHandHoldingMedical className="w-6 h-6" /> },
-    { label: 'Submit', icon: <FaPaperPlane className="w-6 h-6" /> },
+    { label: 'Submit', icon: <FaPaperPlane className=" w-4 h-4 md:w-6 md:h-6" /> },
+
+    { label: 'Palm', icon: <GiPalm className=" w-4 h-4 md:w-6 md:h-6" /> },
+    { label: 'Conjunctiva', icon: <FaEye className=" w-4 h-4 md:w-6 md:h-6" /> },
+    { label: 'Nailbed', icon: <FaHandHoldingMedical className=" w-4 h-4 md:w-6 md:h-6" /> },
   ];
 
   return (
-    <div className="w-1/2 stick top-[8rem] m-auto flex justify-between mt-6 items-center mb-6 px-2">
+    <div className="w-full lg:w-1/2 stick top-[8rem] m-auto flex justify-between mt-6 items-center mb-6 px-2">
       {steps.map((step, index) => {
         const isCompleted = index < currentStep;
         const isCurrent = index === currentStep;
@@ -30,7 +31,7 @@ const StepperProgress = () => {
             {/* Step circle */}
             <div className="flex flex-col items-center relative z-10">
               <div
-                className={`flex items-center justify-center w-14 h-14 rounded-full text-white transition-all duration-300 ${
+                className={`flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-full text-white transition-all duration-300 ${
                   isCompleted
                     ? 'bg-red-700'
                     : isCurrent

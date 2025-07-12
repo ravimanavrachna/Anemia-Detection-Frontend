@@ -12,7 +12,7 @@ const StepTwo = () => {
     <div>
        <StepperProgress currentStep={currentStep} />
 
-        <div className="grid grid-cols-2 items-center gap-12 mt-10">
+        <div className="grid grid-cols-1 lg:grid lg:grid-cols-2 items-center gap-12 mt-10">
         <ImageUploadSection localKey="LeftConjunctiva" title="Left Conjunctiva" />
         <ImageUploadSection localKey="RightConjunctiva" title="Right Conjunctiva" />
       </div>

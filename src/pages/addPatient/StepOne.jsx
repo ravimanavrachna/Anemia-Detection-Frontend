@@ -14,7 +14,7 @@ const StepOne = () => {
       <StepperProgress currentStep={currentStep} />
 
       {/* Upload Sections */}
-      <div className="grid grid-cols-2 items-center gap-12 mt-10">
+      <div className="grid grid-cols-1 lg:grid lg:grid-cols-2 items-center gap-12 mt-10">
         <ImageUploadSection localKey="LeftPalm" title="Left Palm" />
         <ImageUploadSection localKey="RightPalm" title="Right Palm" />
       </div>
@@ -23,7 +23,7 @@ const StepOne = () => {
       <div className="flex justify-end mt-10 px-6">
         <StepNavButtons
           nextUrl="/donor/add-donor/upload-conjunctiva-image"
-          prevUrl={null}
+          prevUrl="/donor/add-donor"
         />
       </div>
     </div>

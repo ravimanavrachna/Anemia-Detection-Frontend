@@ -60,7 +60,7 @@ const AllRoutes = () => {
 
 
       {/* Catch-all route to redirect unauthenticated users */}
-      <Route path="*" element={<Navigate to="/login" />} />
+      {/* <Route path="*" element={<Navigate to="/login" />} /> */}
     </Routes>
   );
 };

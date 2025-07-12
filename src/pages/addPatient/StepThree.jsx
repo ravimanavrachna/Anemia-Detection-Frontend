@@ -16,7 +16,8 @@ const StepThree = () => {
       {/* <ImageUploadSection title="Right Nailbed" /> */}
       </div>
       <StepNavButtons
-        nextUrl="/donor/add-donor"
+        // nextUrl="/donor/add-donor"
+        nextUrl={`/donor/donor-detail`}
         prevUrl='/donor/add-donor/upload-conjunctiva-image' // null/undefined disables the button
       />
     </div>
