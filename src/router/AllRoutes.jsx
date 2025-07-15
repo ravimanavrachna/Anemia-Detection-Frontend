@@ -19,7 +19,7 @@ import ProfilePage from '../pages/profile/ProfilePage';
 // Function to check token security
 const isAuthenticated = () => {
   const token = sessionStorage.getItem('authToken');
-  return !!token;
+  return !token;
 };
 
 // PrivateRoute Component
