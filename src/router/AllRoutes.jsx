@@ -15,52 +15,101 @@ import BlockPage from '../pages/admin/blockPage/BlockPage';
 import AdminDashboard from '../pages/admin/adminDashboard/AdminDashboard';
 import BlockPageDetails from '../pages/admin/blockPage/BlockPageDetails';
 import ProfilePage from '../pages/profile/ProfilePage';
+import useGet from '../hooks/useGet';
+import Unauthorized from '../componants/Unauthorized';
 
-// Function to check token security
 const isAuthenticated = () => {
   const token = sessionStorage.getItem('authToken');
   return !!token;
 };
 
-// PrivateRoute Component
 const PrivateRoute = ({ element }) => {
   return isAuthenticated() ? element : <Navigate to="/login" />;
+};
+
+const RoleBasedRoute = ({ element, allowedUserTypes }) => {
+  const { data, loading } = useGet("api/doctor/profile");
+
+  if (!isAuthenticated()) {
+    return <Navigate to="/login" />;
+  }
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!data || !allowedUserTypes.includes(data.userType)) {
+    return <Navigate to="/unauthorized" />;
+  }
+
+  return element;
 };
 
 const AllRoutes = () => {
   return (
     <Routes>
-      {/* Public Routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/otp" element={<Otp />} />
 
+      <Route
+        path="/admin/dashboard"
+        element={<RoleBasedRoute element={<AdminDashboard />} allowedUserTypes={["1"]} />}
+      />
+      <Route
+        path="/admin/approval"
+        element={<RoleBasedRoute element={<ApprovedPage />} allowedUserTypes={["1"]} />}
+      />
+      <Route
+        path="/admin/block"
+        element={<RoleBasedRoute element={<BlockPage />} allowedUserTypes={["1"]} />}
+      />
+      <Route
+        path="/admin/block/123"
+        element={<RoleBasedRoute element={<BlockPageDetails />} allowedUserTypes={["1"]} />}
+      />
 
-      {/* Protected Routes */}
-      <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
-      <Route path="/admin/dashboard" element={<PrivateRoute element={<AdminDashboard />} />} />
-      <Route path="/admin/approval" element={<PrivateRoute element={<ApprovedPage />} />} />
-      <Route path="/admin/block" element={<PrivateRoute element={<BlockPage />} />} />
-      <Route path="/admin/block/123" element={<PrivateRoute element={<BlockPageDetails />} />} />
+      <Route
+        path="/dashboard"
+        element={<RoleBasedRoute element={<Dashboard />} allowedUserTypes={["2"]} />}
+      />
+      <Route
+        path="/donor/add-donor"
+        element={<RoleBasedRoute element={<AddPatient />} allowedUserTypes={["2"]} />}
+      />
+      <Route
+        path="/donor/add-donor/upload-palm-image"
+        element={<RoleBasedRoute element={<StepOne />} allowedUserTypes={["2"]} />}
+      />
+      <Route
+        path="/donor/add-donor/upload-conjunctiva-image"
+        element={<RoleBasedRoute element={<StepTwo />} allowedUserTypes={["2"]} />}
+      />
+      <Route
+        path="/donor/add-donor/upload-nailbde-image"
+        element={<RoleBasedRoute element={<StepThree />} allowedUserTypes={["2"]} />}
+      />
 
+      <Route
+        path="/donor/all-donor"
+        element={<PrivateRoute element={<ViewPatient />} />}
+      />
+      <Route
+        path="/donor/donor-detail/:donorID"
+        element={<PrivateRoute element={<PatientDetail />} />}
+      />
+      <Route
+        path="/setting"
+        element={<PrivateRoute element={<PatientDetail />} />}
+      />
+      <Route
+        path="/profile"
+        element={<PrivateRoute element={<ProfilePage />} />}
+      />
 
-      <Route path="/donor/all-donor" element={<PrivateRoute element={<ViewPatient />} />} />
-      <Route path="/donor/add-donor" element={<PrivateRoute element={<AddPatient />} />} />
-      <Route path="/donor/donor-detail/:donorID" element={<PrivateRoute element={<PatientDetail />} />} />
-      <Route path="/setting" element={<PrivateRoute element={<PatientDetail />} />} />
-      <Route path="/profile" element={<PrivateRoute element={<ProfilePage />} />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
 
-      <Route path="/donor/add-donor/upload-palm-image" element={<PrivateRoute element={<StepOne />} />} />
-      <Route path="/donor/add-donor/upload-conjunctiva-image" element={<PrivateRoute element={<StepTwo />} />} />
-      <Route path="/donor/add-donor/upload-nailbde-image" element={<PrivateRoute element={<StepThree />} />} />
-      <Route path="/donor/add-donor" element={<PrivateRoute element={<AddPatient />} />} />
-
-
-    
-
-
-      {/* Catch-all route to redirect unauthenticated users */}
-      {/* <Route path="*" element={<Navigate to="/login" />} /> */}
+      <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );
 };

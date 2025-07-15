@@ -61,7 +61,14 @@ const Login = () => {
         
         // alert(result?.message);
         <Success data={result?.message}/>
-         navigate('/dashboard');
+
+        if(result?.userType == 1 ){
+            navigate('/admin/dashboard');
+        } else if(result?.userType == 2){
+           navigate('/dashboard');
+        }
+        
+         
           
       }
       

@@ -5,6 +5,7 @@ import LogOutModal from '../modal/LogOutModal';
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from 'react-router';
 import { LogOut, Settings, ShieldCheck, User } from 'lucide-react';
+import useGet from '../hooks/useGet';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const Navbar = () => {
   const menuRef = useRef(null);
   const {pathname} = useLocation();
   const menuButtonRef = useRef(null);
+  const {data} = useGet('api/doctor/profile')
 
   const MenuItemData = [
     { name: "Profile", icon: <User /> },
@@ -20,6 +22,8 @@ const Navbar = () => {
     { name: "Privacy Policy", icon: <ShieldCheck /> },
     { name: "Logout", icon: <LogOut /> },
   ];
+
+  console.log("data" , data)
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -58,7 +62,7 @@ const Navbar = () => {
         </div>
         <div className=' flex gap-3 justify-end pr items-center'>
         <div className='text-white lg:text-black'>
-          Ravi Rana
+          {data?.name}
         </div>
 
         <div className="flex items-center gap-4">
@@ -90,7 +94,7 @@ const Navbar = () => {
                   RR
                 </div>
                 <div>
-                  <p className="s2-text !text-gray-500">Ravi Rana</p>
+                  <p className="s2-text !text-gray-500"> {data?.name}</p>
                   <p className="s3-text !text-gray-700">Doctor</p>
                 </div>
               </div>
