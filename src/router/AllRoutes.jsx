@@ -20,7 +20,7 @@ import Unauthorized from '../componants/Unauthorized';
 
 const isAuthenticated = () => {
   const token = sessionStorage.getItem('authToken');
-  return !!token;
+  return !token;
 };
 
 const PrivateRoute = ({ element }) => {

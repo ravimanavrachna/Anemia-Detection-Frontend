@@ -4,7 +4,7 @@ import ApexCharts from "react-apexcharts";
 const BloodGroupBarGraph = () => {
   const options = {
     colors: ["#D32F2F"], // Red color for blood group bars
-    chart: {
+    chart: { 
       type: "bar",
       height: 350,
       fontFamily: "Inter, sans-serif",
