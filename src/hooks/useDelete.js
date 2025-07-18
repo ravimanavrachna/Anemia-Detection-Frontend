@@ -11,12 +11,12 @@ const useDelete = (url) => {
     try {
       setLoading(true);
 
-      const token = sessionStorage.getItem("authToken"); // ✅ Get token from localStorage
+      const token = sessionStorage.getItem("authToken");
 
       const response = await axios.delete(`${apiHost}/${url}/${qrId}`, {
         headers: {
-          Authorization: `Bearer ${token}`, // ✅ Add token to Authorization header
-          ...headers, // ✅ Merge with any custom headers passed
+          Authorization: `Bearer ${token}`, 
+          ...headers, 
         },
       });
 

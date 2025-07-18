@@ -10,24 +10,24 @@ const usePost = (url) => {
   const postData = async (data) => {
     try {
       setLoading(true);
-      setError(null); // Reset error state
+      setError(null); 
 
-      const token = sessionStorage.getItem("authToken"); // ✅ Get token from localStorage
-
+      const token = sessionStorage.getItem("authToken"); 
+      
       const response = await axios.post(`${apiHost}/${url}`, data, {
         headers: {
-          Authorization: `Bearer ${token}`, // ✅ Add token to Authorization header
+          Authorization: `Bearer ${token}`, 
           "Content-Type": "application/json",
         },
       });
 
       setResponseData(response.data);
-      return response.data; // ✅ API response return kar raha hoon
+      return response.data;
 
     } catch (err) {
       const apiError = err?.response?.data || "Something went wrong!";
       setError(apiError);
-      return { error: apiError }; // ✅ Error return kar raha hoon
+      return { error: apiError }; 
 
     } finally {
       setLoading(false);

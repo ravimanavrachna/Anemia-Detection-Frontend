@@ -10,11 +10,11 @@ const usePut = (url) => {
   const putData = async (data) => {
     try {
       setLoading(true);
-      const token = sessionStorage.getItem("authToken"); // ✅ Token get karo
+      const token = sessionStorage.getItem("authToken"); 
 
       const response = await axios.put(`${apiHost}/${url}`, data, {
         headers: {
-          Authorization: `Bearer ${token}`, // ✅ Token header me bhejo
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });

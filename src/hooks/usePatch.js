@@ -11,11 +11,11 @@ const usePatch = (url) => {
   const patchData = async (data) => {
     try {
       setLoading(true);
-      const token = sessionStorage.getItem("authToken"); // ✅ Token get karo
+      const token = sessionStorage.getItem("authToken"); 
 
       const response = await axios.patch(`${apiHost}/${url}`, data, {
         headers: {
-          Authorization: `Bearer ${token}`, // ✅ Token header me bhejo
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
