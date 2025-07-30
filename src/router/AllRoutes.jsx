@@ -41,7 +41,7 @@ const AllRoutes = () => {
       <Route path="/admin/dashboard" element={<PrivateRoute element={<AdminDashboard />} />} />
       <Route path="/admin/approval" element={<PrivateRoute element={<ApprovedPage />} />} />
       <Route path="/admin/block" element={<PrivateRoute element={<BlockPage />} />} />
-      <Route path="/admin/block/123" element={<PrivateRoute element={<BlockPageDetails />} />} />
+      <Route path="/admin/block/:doctorID" element={<PrivateRoute element={<BlockPageDetails />} />} />
 
 
       <Route path="/donor/all-donor" element={<PrivateRoute element={<ViewPatient />} />} />

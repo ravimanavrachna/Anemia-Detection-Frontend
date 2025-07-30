@@ -9,30 +9,29 @@ import StepNavButtons from "../../componants/StepNavButtons";
 
 const AddPatient = () => {
   const navigate = useNavigate();
-  const { postData } = usePost("api/donor/add-donor"); // ✅ Your API endpoint
-  const {data} = useGet('')
+  const { postData } = usePost("api/donor/add-donor");
+  const { data } = useGet("");
+
   const [form, setForm] = useState({
     name: "",
-    email:"",
-    mobile:"",
-    dob:"",
-    age:"",
-    ageGroup:"",
-    sex:"",
-    empID:"",
-    height:"",
-    weight:"",
-    bloodGroup:"",
-    doctorName:"",
-    doctorID:"12",
-    date:Date.now(),
-    donorID:Math.random()+Date.now(),
-    nailStatus:"",
-    palmStatus:"",
-    hBValue:"",
-    totalAnemicStatus:"Anemic",
-    
-    
+    email: "",
+    mobile: "",
+    dob: "",
+    age: "",
+    ageGroup: "",
+    sex: "",
+    empID: "",
+    height: "",
+    weight: "",
+    bloodGroup: "",
+    doctorName: "",
+    doctorID: "12",
+    date: Date.now(),
+    donorID: Math.random() + Date.now(),
+    nailStatus: "",
+    palmStatus: "",
+    hBValue: "",
+    totalAnemicStatus: "Anemic",
   });
 
   const [images, setImages] = useState({
@@ -51,34 +50,47 @@ const AddPatient = () => {
   };
 
   const handleSubmit = async () => {
-    const formData = new FormData();
-
-    // Add text fields
-    Object.entries(form).forEach(([key, value]) => {
-      formData.append(key, value);
+    // Convert images to base64 for saving in localStorage
+    const imagePromises = Object.entries(images).map(([key, file]) => {
+      if (!file) return [key, null];
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve([key, reader.result]);
+        reader.readAsDataURL(file);
+      });
     });
 
-    // Add images
+    const imageEntries = await Promise.all(imagePromises);
+    const base64Images = Object.fromEntries(imageEntries);
+
+    const donorData = {
+      ...form,
+      images: base64Images,
+    };
+
+    // Save to localStorage
+    localStorage.setItem("donorData", JSON.stringify(donorData));
+
+    console.log("Saved donor data:", donorData);
+
+    // Submit to API (optional if backend needed)
+    const formData = new FormData();
+    Object.entries(form).forEach(([key, value]) => formData.append(key, value));
     Object.entries(images).forEach(([key, file]) => {
       if (file) formData.append(key, file);
     });
 
-    console.log("FormDAta", formData);
-
     const res = await postData(formData);
-    console.log('formdatatatata'  , form)
-    if (!res.error) navigate(`/donor/donor-detail/${form?.donorID}`);
-  };
 
-  console.log("dataa", form);
-  console.log("images", images);
+    if (!res.error) {
+      navigate(`/donor/donor-detail/${form?.donorID}`);
+    }
+  };
 
   return (
     <div>
       <StepperProgress />
-      {/* <PageTitle title="Add Donor" /> */}
-      
-         <div className="bg-white h-[55vh] overflow-auto rounded-lg p-4 mt-4 font-urbanist">
+      <div className="bg-white h-[55vh] overflow-auto rounded-lg p-4 mt-4 font-urbanist">
         <h2 className="text-3xl font-bold mb-6 text-center text-red-500">
           Add the Donor Details
         </h2>
@@ -89,7 +101,7 @@ const AddPatient = () => {
             {
               label: "Height",
               name: "height",
-              placeholder: `Feet'inches" / cm`,
+              placeholder: `Feet'inches" / cm,`
             },
             { label: "Age", name: "age", type: "number" },
             { label: "Weight", name: "weight", placeholder: "Kg" },
@@ -150,24 +162,20 @@ const AddPatient = () => {
         </form>
       </div>
 
-    
-      <StepNavButtons
-        nextUrl={`/donor/donor-detail/${form?.donorID}`}
-        prevUrl='/donor/add-donor/upload-nailbde-image' // null/undefined disables the button
-      />
-    
-
-      
-
-      {/* <div className="flex justify-center my-10">
+      <div className="flex justify-center my-6">
         <button
           type="button"
           onClick={handleSubmit}
           className="bg-red-600 text-white px-8 py-2 rounded-lg"
         >
-          Submit
+          Submit & Save
         </button>
-      </div> */}
+      </div>
+
+      <StepNavButtons
+        nextUrl={`/donor/donor-detail/${form?.donorID}`}
+        prevUrl="/donor/add-donor/upload-nailbde-image"
+      />
     </div>
   );
 };
