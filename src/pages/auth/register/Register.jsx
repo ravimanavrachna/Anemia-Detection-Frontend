@@ -80,7 +80,7 @@ const Register = () => {
       setFormError(result.error.error || 'Registration failed. Please try again.');
     } else {
       // alert('Registered successfully!');
-      navigate('/otp', { state: { mobile: formData.mobile } });
+      navigate('/otp', { state: { email: formData.email } });
     }
   };
 

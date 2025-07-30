@@ -5,7 +5,9 @@ import usePost from '../../../hooks/usePost';
 const Otp = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const mobile = location?.state?.mobile;
+  const email = location?.state?.email;
+
+  console.log("email" , email)
 
 
 
@@ -32,7 +34,7 @@ const Otp = () => {
       const fullOtp = newOtp.join('');
   
       try {
-        const result = await postData({ mobile, otp: fullOtp }); // ✅ send mobile with OTP
+        const result = await postData({ email, otp: fullOtp }); // ✅ send mobile with OTP
         
         console.log( 'asdfasdf' , result)
         if (result?.error) {
@@ -67,7 +69,7 @@ const Otp = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-red-100 to-red-300 p-4">
       <div className="bg-white shadow-xl rounded-3xl p-8 w-full max-w-md text-center">
         <h2 className="text-3xl font-bold text-red-500 mb-4">Enter OTP</h2>
-        <p className="text-gray-600 mb-6">We’ve sent a 6-digit code to <strong>{mobile}</strong></p>
+        <p className="text-gray-600 mb-6">We’ve sent a 6-digit code to <strong>{email}</strong></p>
 
         <div className="flex justify-center gap-3 mb-4">
           {otp.map((digit, index) => (
