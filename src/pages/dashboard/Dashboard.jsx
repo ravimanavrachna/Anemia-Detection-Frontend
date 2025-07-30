@@ -3,7 +3,7 @@ import PageTitle from '../../componants/PageTitle'
 import { DashboardDoctorImg } from '../../componants/IconsSVG'
 import DoctorImage from '../../assets/DashboardDocterCartoon.png'
 import BloodGroupBarGraph from './BloodGroupBarGraph'
-import BloodGroupDonutChart from './BloodGroupDonutChart '
+import BloodGroupDonutChart from './BloodGroupDonutChart'
 import { HoverAnimation } from '../../componants/CommonStyle'
 
 const Dashboard = () => {

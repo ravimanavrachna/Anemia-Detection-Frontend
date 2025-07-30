@@ -1,23 +1,40 @@
-import React, { useState } from 'react';
-import PageTitle from '../../componants/PageTitle';
+import React, { useEffect, useState } from "react";
+import PageTitle from "../../componants/PageTitle";
+import usePut from "../../hooks/usePut";
+import useGet from "../../hooks/useGet";
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '(+91) ',
-    doctorId: '',
-    designation: '',
-    block: '',
-    address: '',
-    state: '',
-    pinCode: '',
-    country: 'India',
+    firstName: "",  
+    lastName: "", 
+    email: "",
+    phone: "(+91) ",
+    doctorId: "",
+    designation: "",
+    block: "",
+    address: "",
+    state: "",
+    pinCode: "",
+    country: "India",
   });
 
   const [image, setImage] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+
+  // Here we will do the get request from the useGet hook.
+  const { data, loading: getLoading, error: getError } = useGet("api/admin/profile");
+
+  // Put request api calling from here using the react hooks usePut request.
+  const { putData, loading } = usePut("api/admin/profile");
+
+  // Here the useEffect () used to mount it once the data is fetched and the dependency array will run when ever there is a change.
+  useEffect(() => {
+    if (data && !getError) {
+      setProfile(data);
+    } else if (getError) {
+      alert("Failed to fetch profile!");
+    }
+  }, [data, getError]);
 
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
@@ -30,9 +47,15 @@ const ProfilePage = () => {
     }
   };
 
-  const handleSave = () => {
-    setIsEditing(false);
-    alert('Profile saved!');
+  // Here the handleSave will update the data and send it to the backend.
+  const handleSave = async () => {
+    const result = await putData(profile);
+    if (!result.error) {
+      alert("Profile updated successfully!");
+      setIsEditing(false);
+    } else {
+      alert("Failed to update profile!");
+    }
   };
 
   const handleEdit = () => {
@@ -40,29 +63,51 @@ const ProfilePage = () => {
   };
 
   const States = [
-    'Andhra Pradesh',
-    'Bihar',
-    'Delhi',
-    'Gujarat',
-    'Karnataka',
-    'Madhya Pradesh',
-    'Maharashtra',
-    'Rajasthan',
-    'Tamil Nadu',
-    'Uttar Pradesh',
+    "Andhra Pradesh",
+    "Bihar",
+    "Delhi",
+    "Gujarat",
+    "Karnataka",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Rajasthan",
+    "Tamil Nadu",
+    "Uttar Pradesh",
   ].sort();
 
   const fields = [
-    { label: 'First Name', name: 'firstName', placeholder: 'Enter First Name' },
-    { label: 'Last Name', name: 'lastName', placeholder: 'Enter Last Name' },
-    { label: 'Email ID', name: 'email', type: 'email', placeholder: 'Enter your Email' },
-    { label: 'Phone Number', name: 'phone' },
-    { label: 'Doctor ID', name: 'doctorId', placeholder: 'Enter Doctor ID' },
-    { label: 'Designation', name: 'designation', placeholder: 'Enter Designation' },
-    { label: 'Block', name: 'block', placeholder: 'Enter your Block' },
-    { label: 'Address', name: 'address', placeholder: 'Enter your Address', colSpan: true },
-    { label: 'Pin Code', name: 'pinCode', placeholder: 'Enter Pin Code' },
+    { label: "First Name", name: "firstName", placeholder: "Enter First Name" },
+    { label: "Last Name", name: "lastName", placeholder: "Enter Last Name" },
+    {
+      label: "Email ID",
+      name: "email",
+      type: "email",
+      placeholder: "Enter your Email",
+    },
+    { label: "Phone Number", name: "phone" },
+    { label: "Doctor ID", name: "doctorId", placeholder: "Enter Doctor ID" },
+    {
+      label: "Designation",
+      name: "designation",
+      placeholder: "Enter Designation",
+    },
+    { label: "Block", name: "block", placeholder: "Enter your Block" },
+    {
+      label: "Address",
+      name: "address",
+      placeholder: "Enter your Address",
+      colSpan: true,
+    },
+    { label: "Pin Code", name: "pinCode", placeholder: "Enter Pin Code" },
   ];
+
+  if (getLoading || loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -75,10 +120,10 @@ const ProfilePage = () => {
               <img
                 src={image}
                 alt="Uploaded"
-                className="rounded-full mx-auto w-40 h-40 object-cover"
+                className="rounded-full mx-auto w-20 h-20 object-cover"
               />
             ) : (
-              <div className="rounded-full mx-auto w-40 h-40 border-2 border-dashed flex items-center justify-center text-5xl text-gray-400">
+              <div className="rounded-full mx-auto w-20 h-20 border-2 border-dashed flex items-center justify-center text-5xl text-gray-400">
                 +
               </div>
             )}
@@ -106,11 +151,11 @@ const ProfilePage = () => {
             <div key={field.name}>
               <label className="text-lg font-medium">{field.label}</label>
               <input
-                type={field.type || 'text'}
+                type={field.type || "text"}
                 name={field.name}
                 value={profile[field.name]}
                 onChange={handleChange}
-                placeholder={field.placeholder || ''}
+                placeholder={field.placeholder || ""}
                 className="w-full border rounded px-3 py-2 mt-2 text-lg"
                 disabled={!isEditing}
               />
@@ -122,11 +167,11 @@ const ProfilePage = () => {
             <div key={field.name}>
               <label className="text-lg font-medium">{field.label}</label>
               <input
-                type={field.type || 'text'}
+                type={field.type || "text"}
                 name={field.name}
                 value={profile[field.name]}
                 onChange={handleChange}
-                placeholder={field.placeholder || ''}
+                placeholder={field.placeholder || ""}
                 className="w-full border rounded px-3 py-2 mt-2 text-lg"
                 disabled={!isEditing}
               />
@@ -159,7 +204,9 @@ const ProfilePage = () => {
             >
               <option value="">Select State</option>
               {States.map((state) => (
-                <option key={state} value={state}>{state}</option>
+                <option key={state} value={state}>
+                  {state}
+                </option>
               ))}
             </select>
           </div>
@@ -191,7 +238,7 @@ const ProfilePage = () => {
             onClick={handleEdit}
             className="mt-8 w-full bg-orange-500 text-xl font-semibold text-white py-3 rounded shadow hover:bg-orange-600 hover:shadow-lg"
           >
-            Edit Profile
+            Update Profile
           </button>
         )}
       </div>
@@ -199,4 +246,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default ProfilePage;
