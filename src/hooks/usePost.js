@@ -10,14 +10,15 @@ const usePost = (url) => {
   const postData = async (data) => {
     try {
       setLoading(true);
-      setError(null); 
+      setError(null);
 
-      const token = sessionStorage.getItem("authToken"); 
-      
+      const token = sessionStorage.getItem("authToken");
+      const isFormData = data instanceof FormData;
+
       const response = await axios.post(`${apiHost}/${url}`, data, {
         headers: {
-          Authorization: `Bearer ${token}`, 
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        ...(isFormData ? {} : { "Content-Type": "application/json" }), // ✅ Skip for FormData
         },
       });
 
@@ -27,7 +28,7 @@ const usePost = (url) => {
     } catch (err) {
       const apiError = err?.response?.data || "Something went wrong!";
       setError(apiError);
-      return { error: apiError }; 
+      return { error: apiError };
 
     } finally {
       setLoading(false);

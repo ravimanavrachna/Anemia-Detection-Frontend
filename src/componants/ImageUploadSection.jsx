@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Camera, X, Trash2 } from "lucide-react";
 
-const ImageUploadSection = ({ title, localKey, onApiCall }) => {
+const ImageUploadSection = ({ title,img, name, saveImage, onApiCall }) => {
   const [preview, setPreview] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [streaming, setStreaming] = useState(false);
@@ -11,19 +11,19 @@ const ImageUploadSection = ({ title, localKey, onApiCall }) => {
 
   // Load from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem(localKey);
+    const stored = img;
     if (stored) {
       setPreview(stored);
       setImageUploaded(true);
     }
-  }, [localKey]);
+  }, [img]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        localStorage.setItem(localKey, reader.result);
+        saveImage(name, reader.result)
         setPreview(reader.result);
         setImageUploaded(true);
       };
@@ -31,22 +31,22 @@ const ImageUploadSection = ({ title, localKey, onApiCall }) => {
     }
   };
 
-const startCamera = async () => {
-  setShowCamera(true); // First show the modal
+  const startCamera = async () => {
+    setShowCamera(true); // First show the modal
 
-  setTimeout(async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    setTimeout(async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
 
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        setStreaming(true);
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          setStreaming(true);
+        }
+      } catch (error) {
+        alert("Camera access denied or unavailable.");
       }
-    } catch (error) {
-      alert("Camera access denied or unavailable.");
-    }
-  }, 100); // Wait a short time to ensure video element exists
-};
+    }, 100); // Wait a short time to ensure video element exists
+  };
 
 
   const stopCamera = () => {
@@ -62,14 +62,14 @@ const startCamera = async () => {
     const context = canvasRef.current.getContext("2d");
     context.drawImage(videoRef.current, 0, 0, 300, 200);
     const imageData = canvasRef.current.toDataURL("image/png");
-    localStorage.setItem(localKey, imageData);
+    saveImage(name, imageData)
     setPreview(imageData);
     setImageUploaded(true);
     stopCamera();
   };
 
   const removeImage = () => {
-    localStorage.removeItem(localKey);
+    saveImage(name, null)
     setPreview(null);
     setImageUploaded(false);
   };

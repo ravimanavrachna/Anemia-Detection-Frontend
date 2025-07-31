@@ -6,26 +6,26 @@ import usePost from "../../hooks/usePost";
 import useGet from "../../hooks/useGet";
 import StepperProgress from "../../componants/StepperProgress";
 import StepNavButtons from "../../componants/StepNavButtons";
+import { useDispatch } from "react-redux";
+import { saveDonorDetails } from "../../redux/donorReducer";
 
 const AddPatient = () => {
-  const navigate = useNavigate();
-  const { postData } = usePost("api/donor/add-donor");
-  const { data } = useGet("");
-
+  const dispatch = useDispatch()
+  //message:"Missing required fields: name, role, mobileNo, dob, height, weight, sex, block, bloodGroup"
   const [form, setForm] = useState({
     name: "",
+    role: "Student",
     email: "",
-    mobile: "",
-    dob: "",
+    mobileNo: "",
+    dob: "2009-11-24",
     age: "",
     ageGroup: "",
     sex: "",
-    empID: "",
+    employeeId: "",
     height: "",
     weight: "",
     bloodGroup: "",
     doctorName: "",
-    doctorID: "12",
     date: Date.now(),
     donorID: Math.random() + Date.now(),
     nailStatus: "",
@@ -34,59 +34,13 @@ const AddPatient = () => {
     totalAnemicStatus: "Anemic",
   });
 
-  const [images, setImages] = useState({
-    leftEyeImages: null,
-    rightEyeImages: null,
-    handImage: null,
-    nailbedImage: null,
-  });
-
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleImageSelect = (key) => (file) => {
-    setImages((prev) => ({ ...prev, [key]: file }));
-  };
-
-  const handleSubmit = async () => {
-    // Convert images to base64 for saving in localStorage
-    const imagePromises = Object.entries(images).map(([key, file]) => {
-      if (!file) return [key, null];
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve([key, reader.result]);
-        reader.readAsDataURL(file);
-      });
-    });
-
-    const imageEntries = await Promise.all(imagePromises);
-    const base64Images = Object.fromEntries(imageEntries);
-
-    const donorData = {
-      ...form,
-      images: base64Images,
-    };
-
-    // Save to localStorage
-    localStorage.setItem("donorData", JSON.stringify(donorData));
-
-    console.log("Saved donor data:", donorData);
-
-    // Submit to API (optional if backend needed)
-    const formData = new FormData();
-    Object.entries(form).forEach(([key, value]) => formData.append(key, value));
-    Object.entries(images).forEach(([key, file]) => {
-      if (file) formData.append(key, file);
-    });
-
-    const res = await postData(formData);
-
-    if (!res.error) {
-      navigate(`/donor/donor-detail/${form?.donorID}`);
-    }
-  };
-
+  const nextEventHandler = () => {
+    dispatch(saveDonorDetails(form))
+  }
   return (
     <div>
       <StepperProgress />
@@ -97,16 +51,18 @@ const AddPatient = () => {
         <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[
             { label: "Name", name: "name" },
-            { label: "Roll No. / Employee ID", name: "empID" },
+            { label: "Roll No. / Employee ID", name: "employeeId" },
             {
               label: "Height",
               name: "height",
               placeholder: `Feet'inches" / cm,`
             },
-            { label: "Age", name: "age", type: "number" },
+            { label: "DOB", name: "dob", type: "date" },
             { label: "Weight", name: "weight", placeholder: "Kg" },
             { label: "Blood Group", name: "bloodGroup" },
-            { label: "Mobile Number", name: "mobile" },
+            { label: "Mobile Number", name: "mobileNo" },
+            { label: "Block", name: "block" },
+            { label: "Role", name: "role" },
           ].map(({ label, name, type = "text", placeholder = "" }) => (
             <div key={name}>
               <label className="block text-red-800 font-semibold mb-1">
@@ -125,7 +81,7 @@ const AddPatient = () => {
           <div>
             <label className="block text-red-800 font-semibold mb-1">Sex</label>
             <div className="grid grid-cols-3 mt-1">
-              {["Male", "Female", "Prefer Not to Say"].map((value) => (
+              {["male", "female", "Prefer Not to Say"].map((value) => (
                 <label key={value} className="flex items-center space-x-2">
                   <input
                     type="radio"
@@ -162,31 +118,25 @@ const AddPatient = () => {
         </form>
       </div>
 
-    
+
       <StepNavButtons
-        // nextUrl={`/donor/donor-detail/${form?.donorID}`}
+        nextEvent={nextEventHandler}
         nextUrl={`/donor/add-donor/upload-palm-image`}
-prevUrl={null}
-        // prevUrl='/donor/add-donor/upload-nailbde-image' // null/undefined disables the button
+        prevUrl={null}
       />
-    
 
-      
 
-      <div className="flex justify-center my-10">
+
+
+      {/* <div className="flex justify-center my-10">
         <button
           type="button"
-          onClick={handleSubmit}
+          // onClick={handleSubmit}
           className="bg-red-600 text-white px-8 py-2 rounded-lg"
         >
           Submit & Save
         </button>
-      </div>
-
-      <StepNavButtons
-        nextUrl={`/donor/donor-detail/${form?.donorID}`}
-        prevUrl="/donor/add-donor/upload-nailbde-image"
-      />
+      </div> */}
     </div>
   );
 };

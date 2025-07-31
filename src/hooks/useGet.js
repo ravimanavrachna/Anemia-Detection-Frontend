@@ -18,8 +18,7 @@ const useGet = (url, { params = {}, query = {}, headers = {} } = {}) => {
             Authorization: `Bearer ${token}`, 
             ...headers, 
           },
-        });
-
+        });        
         setData(response.data);
       } catch (err) {
         setError(err.message);

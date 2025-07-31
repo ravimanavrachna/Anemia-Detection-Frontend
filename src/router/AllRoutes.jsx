@@ -110,7 +110,7 @@ const AllRoutes = () => {
         element={<PrivateRoute element={<ViewPatient />} />}
       />
       <Route
-        path="/donor/donor-detail/:donorID"
+        path="/donor/donor-detail/:donorId"
         element={<PrivateRoute element={<PatientDetail />} />}
       />
       <Route

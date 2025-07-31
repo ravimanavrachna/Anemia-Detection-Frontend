@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import usePost from '../../../hooks/usePost';
+import usePatch from '../../../hooks/usePatch';
 
 const Otp = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Otp = () => {
 
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const inputsRef = useRef([]);
-  const { postData, loading } = usePost('api/auth/verify-otp');
+  const { patchData, loading } = usePatch('api/auth/verify-otp');
   const [errorMsg, setErrorMsg] = useState('');
 
 
@@ -34,7 +35,7 @@ const Otp = () => {
       const fullOtp = newOtp.join('');
   
       try {
-        const result = await postData({ email, otp: fullOtp }); // ✅ send mobile with OTP
+        const result = await patchData({ email, otp: fullOtp }); // ✅ send mobile with OTP
         
         console.log( 'asdfasdf' , result)
         if (result?.error) {
@@ -49,7 +50,6 @@ const Otp = () => {
             alert('OTP Verified Successfully!');
             navigate('/dashboard')
           }
-  
           
         }
       } catch (err) {

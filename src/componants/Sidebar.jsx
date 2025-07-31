@@ -12,8 +12,6 @@ export default function Sidebar() {
 
   const { data } = useGet('api/doctor/profile');
   const userType = data?.userType; // ✅ assuming profile API returns userType
-  console.log("user tyoe" , userType)
-
   // 🟢 Menu definitions
   const adminMenu = [
     { name: "Admin Dashboard", path: "/admin/dashboard", icon: <Home size={20} /> },
