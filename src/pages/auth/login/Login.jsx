@@ -53,11 +53,15 @@ const Login = () => {
       alert(result?.error?.error || 'Login failed');
     } else {
       const token = result?.token;
+      const userType = result?.userType;
+
 
       console.log("Token", result)
       console.log("Token", token)
       if (token) {
         sessionStorage.setItem('authToken', token); 
+        sessionStorage.setItem('userType', userType); 
+
         
         // alert(result?.message);
         <Success  data={result?.message}/>

@@ -28,7 +28,9 @@ const PrivateRoute = ({ element }) => {
 };
 
 const RoleBasedRoute = ({ element, allowedUserTypes }) => {
+  
   const { data, loading } = useGet("api/doctor/profile");
+  const userType = sessionStorage.getItem("userType")
 
   if (!isAuthenticated()) {
     return <Navigate to="/login" />;
@@ -38,7 +40,7 @@ const RoleBasedRoute = ({ element, allowedUserTypes }) => {
     return <div>Loading...</div>;
   }
 
-  if (!data || !allowedUserTypes.includes(data.userType)) {
+  if (!userType || !allowedUserTypes.includes(userType)) {
     return <Navigate to="/unauthorized" />;
   }
 

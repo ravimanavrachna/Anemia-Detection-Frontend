@@ -10,8 +10,9 @@ export default function Sidebar() {
   const location = useLocation();
   const [hovered, setHovered] = useState(null);
 
-  const { data } = useGet('api/doctor/profile');
-  const userType = data?.userType; // ✅ assuming profile API returns userType
+  // const { data } = useGet('api/doctor/profile');
+  const userType = sessionStorage.getItem("userType") // ✅ assuming profile API returns userType
+  console.log("user tyoe" ,userType)
   // 🟢 Menu definitions
   const adminMenu = [
     { name: "Admin Dashboard", path: "/admin/dashboard", icon: <Home size={20} /> },
@@ -22,8 +23,8 @@ export default function Sidebar() {
 
   const doctorMenu = [
     { name: "Dashboard", path: "/dashboard", icon: <Home size={20} /> },
-    { name: "All Donor", path: "/donor/all-donor", icon: <Users size={20} /> },
     { name: "Add Donor", path: "/donor/add-donor", icon: <PlusCircle size={20} /> },
+    { name: "All Donor", path: "/donor/all-donor", icon: <Users size={20} /> },
   ];
 
   // 🟢 Combine menus based on userType
