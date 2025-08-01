@@ -44,9 +44,14 @@ const Otp = () => {
           inputsRef.current[0].focus();
         } else {
           console.log("Tokennnnn" , result)
-          const token = result?.token; // ✅ extract token from API response
+          const token = result?.token; 
+          const userType = result?.userType; 
+
           if (token) {
-            sessionStorage.setItem('authToken', token); // ✅ save token in session storage
+            sessionStorage.setItem('authToken', token);
+        sessionStorage.setItem('userType', userType); 
+
+             // ✅ save token in session storage
             alert('OTP Verified Successfully!');
             navigate('/dashboard')
           }

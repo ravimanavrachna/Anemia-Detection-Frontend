@@ -14,7 +14,7 @@ const StepperProgress = () => {
   const currentStep = stepRoutes.indexOf(currentPath);
 
   const steps = [
-    { label: 'Submit', icon: <FaPaperPlane className=" w-4 h-4 md:w-6 md:h-6" /> },
+    { label: 'Add', icon: <FaPaperPlane className=" w-4 h-4 md:w-6 md:h-6" /> },
 
     { label: 'Palm', icon: <GiPalm className=" w-4 h-4 md:w-6 md:h-6" /> },
     { label: 'Conjunctiva', icon: <FaEye className=" w-4 h-4 md:w-6 md:h-6" /> },

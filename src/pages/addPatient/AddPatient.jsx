@@ -14,14 +14,15 @@ const AddPatient = () => {
   //message:"Missing required fields: name, role, mobileNo, dob, height, weight, sex, block, bloodGroup"
   const [form, setForm] = useState({
     name: "",
-    role: "Student",
+    role: "",
     email: "",
     mobileNo: "",
-    dob: "2009-11-24",
+    dob: "",
     age: "",
     ageGroup: "",
     sex: "",
     employeeId: "",
+    doctorID:"1111",
     height: "",
     weight: "",
     bloodGroup: "",
@@ -31,7 +32,7 @@ const AddPatient = () => {
     nailStatus: "",
     palmStatus: "",
     hBValue: "",
-    totalAnemicStatus: "Anemic",
+    // totalAnemicStatus: "Anemic",
   });
 
   const handleChange = (e) => {
@@ -44,7 +45,7 @@ const AddPatient = () => {
   return (
     <div>
       <StepperProgress />
-      <div className="bg-white h-[55vh] overflow-auto rounded-lg p-4 mt-4 font-urbanist">
+      <div className="bg-white overflow-auto rounded-lg p-4 mt-4 font-urbanist">
         <h2 className="text-3xl font-bold mb-6 text-center text-red-500">
           Add the Donor Details
         </h2>
@@ -95,7 +96,7 @@ const AddPatient = () => {
             </div>
           </div>
 
-          <div>
+          {/* <div>
             <label className="block text-red-800 font-semibold mb-1">
               Age Group
             </label>
@@ -114,7 +115,7 @@ const AddPatient = () => {
                 )
               )}
             </div>
-          </div>
+          </div> */}
         </form>
       </div>
 
