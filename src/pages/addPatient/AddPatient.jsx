@@ -22,7 +22,6 @@ const AddPatient = () => {
     ageGroup: "",
     sex: "",
     employeeId: "",
-    doctorID:"1111",
     height: "",
     weight: "",
     bloodGroup: "",

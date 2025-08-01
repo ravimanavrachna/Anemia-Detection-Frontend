@@ -22,7 +22,6 @@ const StepThree = () => {
     const formData = new FormData();
     dispatch(saveDonorNailImg(images))
     const nail_image = images.nail_image;
-    console.log(donorData, { "doctorID": doctorID });
     const { donorDetails, left_eye, right_eye, left_palm, right_palm } = donorData;
     // Append image fields (base64 → Blob → File)
     formData.append("doctorID", doctorID);
