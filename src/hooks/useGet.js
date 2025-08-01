@@ -11,6 +11,7 @@ const useGet = (url, { params = {}, query = {}, headers = {} } = {}) => {
     const fetchData = async () => {
       try {
         const token = sessionStorage.getItem("authToken");
+        console.log(token);
 
         const response = await axios.get(`${apiHost}/${url}`, {
           params: { ...params, ...query },
@@ -19,6 +20,7 @@ const useGet = (url, { params = {}, query = {}, headers = {} } = {}) => {
             ...headers, 
           },
         });        
+
         setData(response.data);
       } catch (err) {
         setError(err.message);

@@ -26,6 +26,8 @@ const Navbar = () => {
     { name: "Logout", icon: <LogOut /> },
   ];
   useEffect(() => {
+    console.log(data);
+    
     if (data && data.doctorID)
       dispatch(saveDoctorID(data.doctorID))
   }, [data])

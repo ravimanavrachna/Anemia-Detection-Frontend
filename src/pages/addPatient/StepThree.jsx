@@ -22,7 +22,7 @@ const StepThree = () => {
     const formData = new FormData();
     dispatch(saveDonorNailImg(images))
     const nail_image = images.nail_image;
-    console.log(donorData, { "doctorID": doctorID });
+    // console.log({ "doctorID": doctorID });
     const { donorDetails, left_eye, right_eye, left_palm, right_palm } = donorData;
     // Append image fields (base64 → Blob → File)
     formData.append("doctorID", doctorID);
@@ -39,9 +39,12 @@ const StepThree = () => {
     }
     try {
       let res = await postData(formData)
+      //  console.log(res)
       if (!res.data.donorId) {
         throw new Error("Didn't get DONOR ID from server")
       }
+     
+
       const {donorId}=res.data;
       navigate(`/donor/donor-detail/${donorId}`)
     } catch (err) {
