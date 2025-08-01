@@ -102,7 +102,7 @@ const AddPatient = () => {
             <label className="block text-red-800 font-semibold mb-1">
               Age Group
             </label>
-            asdf
+            a
             <div className="grid grid-cols-2 gap-6 mt-1">
               {["16–17 years", "18–60 years", "60–65 years", "65+ years"].map(
                 (value) => (
