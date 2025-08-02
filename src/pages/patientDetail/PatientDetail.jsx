@@ -40,14 +40,14 @@ const PatientDetail = () => {
     setRightEyeImage(data?.detailed_results?.eye_analysis?.right_eye.image)
     SetUserPersonalDetails([
       { id: 1, title: "Name", value: data?.name },
-      { id: 2, title: "Roll No. / Employee ID", value: data?.empID },
+      { id: 2, title: "Roll No. / Employee ID", value: data?.employeeId },
       { id: 3, title: "ID", value: data?.donorId },
       { id: 4, title: "Mobile Number", value: data?.mobileNo },
       { id: 5, title: "HB Value", value: data?.hBValue },
     ])
     SetuserMedicalDetail([
       { id: 1, title: "DOB", value: formatDate(data?.dob) },
-      { id: 2, title: "Age Group", value: data?.ageGroup },
+      { id: 2, title: "Blood Group", value: data?.bloodGroup },
       { id: 3, title: "Sex", value: data?.sex },
       { id: 4, title: "Height", value: data?.height },
       { id: 5, title: "Weight", value: data?.weight },
@@ -122,20 +122,9 @@ const PatientDetail = () => {
             </div>
           </div>
            {/* Nail Images */}
-          <div className="bg-white rounded-lg h-[25rem]">
-            <div className="p-4">
-              <h1 className="text-[20px] text-center font-bold font-urbanist">Nail Image</h1>
-            </div>
-            <hr />
-            <div className="flex h-[21rem] p-4 overflow-hidden">
-              <div className="flex justify-center items-center w-[49%]">
-                <img src={nailbedImage} alt="Nail" className="max-h-full object-contain" />
-              </div>
-              <div className="w-[1px] border h-full"></div>
-            
-            </div>
-          </div>
+         
         </div>
+
 
         {/* Heartbeat Badge */}
         <div
@@ -148,6 +137,21 @@ const PatientDetail = () => {
          {finalResult}
         </div>
       </div>
+
+      
+         <div className="bg-white rounded-lg h-[25rem]">
+            <div className="p-4">
+              <h1 className="text-[20px] text-center font-bold font-urbanist">Nail Image</h1>
+            </div>
+            <hr />
+            <div className="flex h-[21rem] p-4 overflow-hidden">
+              <div className="flex justify-center items-center w-[49%]">
+                <img src={nailbedImage} alt="Nail" className="max-h-full object-contain" />
+              </div>
+              <div className="w-[1px] border h-full"></div>
+            
+            </div>
+          </div>
     </div>
   );
 };
