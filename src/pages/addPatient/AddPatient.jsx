@@ -8,10 +8,12 @@ import StepperProgress from "../../componants/StepperProgress";
 import StepNavButtons from "../../componants/StepNavButtons";
 import { useDispatch } from "react-redux";
 import { saveDonorDetails } from "../../redux/donorReducer";
+import { addPatientDetailsValidation } from "../../utils/addPatientValidation";
 
 const AddPatient = () => {
   const dispatch = useDispatch()
   //message:"Missing required fields: name, role, mobileNo, dob, height, weight, sex, block, bloodGroup"
+  const [error,setError]=useState({})
   const [form, setForm] = useState({
     name: "",
     role: "",
@@ -31,7 +33,6 @@ const AddPatient = () => {
     nailStatus: "",
     palmStatus: "",
     hBValue: "",
-    // totalAnemicStatus: "Anemic",
   });
 
   const handleChange = (e) => {
@@ -39,7 +40,15 @@ const AddPatient = () => {
   };
 
   const nextEventHandler = () => {
+    const {isValid,errors}=addPatientDetailsValidation(form);
+    if(isValid){
     dispatch(saveDonorDetails(form))
+    }else{
+      setError(errors)
+      console.log(errors);
+      // alert("Required all feilds");
+      throw new Error("Required all feilds")
+    }
   }
   return (
     <div>
@@ -62,7 +71,6 @@ const AddPatient = () => {
             { label: "Blood Group", name: "bloodGroup" },
             { label: "Mobile Number", name: "mobileNo" },
             { label: "Block", name: "block" },
-            { label: "Role", name: "role" },
           ].map(({ label, name, type = "text", placeholder = "" }) => (
             <div key={name}>
               <label className="block text-red-800 font-semibold mb-1">
@@ -75,8 +83,29 @@ const AddPatient = () => {
                 className="w-full border rounded-md p-2"
                 onChange={handleChange}
               />
+              {error[name]&&<div className="text-red-400" >{error[name]}</div>}
             </div>
           ))}
+
+          <div>
+            <label className="block text-red-800 font-semibold mb-1">Role</label>
+            <div className="grid grid-cols-3 mt-1">
+              {["Student", "Doctor"].map((value) => (
+                <label key={value} className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="role"
+                    value={value}
+                    onChange={handleChange}
+                  />
+                  <span>{value}</span>
+                </label>
+              ))}
+
+            </div>
+            {error.role&&<div className="text-red-400" >{error.role}</div>}
+
+          </div>
 
           <div>
             <label className="block text-red-800 font-semibold mb-1">Sex</label>
@@ -93,6 +122,8 @@ const AddPatient = () => {
                 </label>
               ))}
             </div>
+            {error.sex&&<div className="text-red-400" >{error.sex}</div>}
+
           </div>
 
           

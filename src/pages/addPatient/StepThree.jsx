@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveDonorNailImg, resetDonorData } from '../../redux/donorReducer';
 import usePost from '../../hooks/usePost';
 import Loading from '../../componants/Loading';
+import { step3validation } from '../../utils/addPatientValidation';
 const StepThree = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const { postData, loading, error, responseData } = usePost("api/donor/predict_anemia")
@@ -18,9 +19,21 @@ const StepThree = () => {
   const doctorID = useSelector((state) => state.doctorSlice.doctorID);
   const nail_image = useSelector((state) => state.donorSlice.nail_image);
   const [images, setImages] = useState({ nail_image });
+  const [imgerror, setError] = useState({})
+  
   const nextEventHandler = async () => {
+    const { isValid, errors } = step3validation(images)
+    if (isValid) {
+      dispatch(saveDonorNailImg(images))
+    } else {
+      console.log(errors);
+      setError(errors)
+
+      // alert("Required all feilds");
+      throw new Error("Required all feilds")
+    }
     const formData = new FormData();
-    dispatch(saveDonorNailImg(images))
+
     const nail_image = images.nail_image;
     const { donorDetails, left_eye, right_eye, left_palm, right_palm } = donorData;
     // Append image fields (base64 → Blob → File)
@@ -41,12 +54,13 @@ const StepThree = () => {
       if (!res.data.donorId) {
         throw new Error("Didn't get DONOR ID from server")
       }
-      const {donorId}=res.data;
+      const { donorId } = res.data;
+      dispatch(resetDonorData())
       navigate(`/donor/donor-detail/${donorId}`)
     } catch (err) {
       console.log(err.response.data)
     }
-    // dispatch(resetDonorData())
+    
   }
   const saveImage = (name, img) => {
     setImages((pre) => {
@@ -55,10 +69,10 @@ const StepThree = () => {
   }
   return (
     <div>
-    {loading&&<Loading/>}
+      {loading && <Loading />}
       <StepperProgress currentStep={currentStep} />
       <div className="flex items-center justify-center gap-12 mt-10">
-        <ImageUploadSection img={nail_image} name="nail_image" saveImage={saveImage} localKey="Nailbed" title="Nailbed" />
+        <ImageUploadSection img={nail_image} name="nail_image" error={imgerror.nail_image} saveImage={saveImage} localKey="Nailbed" title="Nailbed" />
       </div>
       <StepNavButtons
         nextEvent={nextEventHandler}
