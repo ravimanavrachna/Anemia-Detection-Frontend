@@ -24,7 +24,7 @@ const AdminAllDonor = () => {
     donor.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const paginatedDonors = searchedDonors.slice(offset, offset + limit);
-console.log(data);
+// console.log(data);
 
   return (
     <div>

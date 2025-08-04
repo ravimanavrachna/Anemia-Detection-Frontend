@@ -41,7 +41,7 @@ const AdminDashboard = () => {
   if (error) return <div>Error loading dashboard: {error}</div>;
 
   const blocks = data ?? [];
-  console.log(data);
+  // console.log(data);
 
 
   // Patients section (empty until backend sends data)

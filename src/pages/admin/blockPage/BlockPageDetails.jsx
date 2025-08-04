@@ -13,7 +13,7 @@ const BlockPageDetails = () => {
   const { data, loading, error } = useGet(`api/admin/doctor/dashboard/${doctorID}`);
     const [bloodSeries, setBloodSeries] = useState([85, 30, 100, 20, 80, 15, 45, 18]);
   
-  console.log(data);
+  // console.log(data);
    useEffect(() => {
       if(data?.bloodGroupStats){
       setBloodSeries(validGroups.map(group => data.bloodGroupStats[group]))

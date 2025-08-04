@@ -20,7 +20,7 @@ const usePatch = (url) => {
         },
       });
 
-      console.log("In the try catch", response);
+      // console.log("In the try catch", response);
       setResponseData(response?.data);
       return response?.data;
     } catch (err) {
