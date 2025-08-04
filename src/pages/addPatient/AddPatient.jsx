@@ -31,7 +31,6 @@ const AddPatient = () => {
     bloodGroup: "",
     doctorName: "",
     date: Date.now(),
-    donorID: Math.random() + Date.now(),
     nailStatus: "",
     palmStatus: "",
     hBValue: "",
@@ -75,7 +74,6 @@ const bloodGroupHandler=(value)=>{
             { label: "Weight", name: "weight", placeholder: "Kg" },
             // { label: "Blood Group", name: "bloodGroup" },
             { label: "Mobile Number", name: "mobileNo" },
-            { label: "Block", name: "block" },
           ].map(({ label, name, type = "text", placeholder = "" }) => (
             <div key={name}>
               <label className="block text-red-800 font-semibold mb-1">

@@ -10,6 +10,7 @@ import { saveDonorNailImg, resetDonorData } from '../../redux/donorReducer';
 import usePost from '../../hooks/usePost';
 import Loading from '../../componants/Loading';
 import { step3validation } from '../../utils/addPatientValidation';
+import Error from '../../componants/Error';
 const StepThree = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const { postData, loading, error, responseData } = usePost("api/donor/predict_anemia")
@@ -51,6 +52,8 @@ const StepThree = () => {
     }
     try {
       let res = await postData(formData)
+      console.log({res});
+      
       if (!res.data.donorId) {
         throw new Error("Didn't get DONOR ID from server")
       }
@@ -58,6 +61,7 @@ const StepThree = () => {
       dispatch(resetDonorData())
       navigate(`/donor/donor-detail/${donorId}`)
     } catch (err) {
+      
       console.log(err.response.data)
     }
     
@@ -70,8 +74,9 @@ const StepThree = () => {
   return (
     <div>
       {loading && <Loading />}
+      {error&&<Error msg={error.message} />}
       <StepperProgress currentStep={currentStep} />
-      <div className="flex items-center justify-center gap-12 mt-10">
+      <div className="flex itßems-center justify-center gap-12 mt-10">
         <ImageUploadSection img={nail_image} name="nail_image" error={imgerror.nail_image} saveImage={saveImage} localKey="Nailbed" title="Nailbed" />
       </div>
       <StepNavButtons

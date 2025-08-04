@@ -26,9 +26,6 @@ export const addPatientDetailsValidation = (data) => {
     } else if (!mobileRegex.test(data.mobileNo)) {
         errors.mobileNo = "Invalid mobile number (must be 10 digits)";
     }
-
-    if (!data.block?.trim()) errors.block = "Block is required";
-
     if (!data.role?.trim()) errors.role = "Role is required";
 
     if (!data.sex?.trim()) errors.sex = "Gender is required";
