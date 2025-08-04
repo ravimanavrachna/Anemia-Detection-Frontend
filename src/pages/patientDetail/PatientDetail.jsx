@@ -25,32 +25,51 @@ const PatientDetail = () => {
   const [userMedicalDetail, SetuserMedicalDetail] = useState(InitialuserMedicalDetail)
   const [nailbedImage, setNailbedImage] = useState("")
   const [leftPalmImage, setLeftPalmImage] = useState("")
+  const [leftPalmImageCrop, setLeftPalmImageCrop] = useState("")
+
   const [rightPalmImage, setRightPalmImage] = useState("")
+  const [rightPalmImageCrop, setRightPalmImageCrop] = useState("")
+
   const [leftEyeImage, setLeftEyeImage] = useState("")
+  const [leftEyeImageCrop, setLeftEyeImageCrop] = useState("")
+
   const [rightEyeImage, setRightEyeImage] = useState("")
+  const [rightEyeImageCrop, setRightEyeImageCrop] = useState("")
+
   const [finalResult,setFinalResult]=useState("")
 
   useEffect(() => {
     // console.log(data);
     setFinalResult(data?.final_prediction_3_models_combined?.prediction)
     setNailbedImage(data?.detailed_results?.nail_analysis?.image)
+
     setLeftPalmImage(data?.detailed_results?.palm_analysis?.left_palm?.image)
+    setLeftPalmImageCrop(data?.detailed_results?.palm_analysis?.left_palm?.image_crop)
+
     setRightPalmImage(data?.detailed_results?.palm_analysis?.right_palm?.image)
+    setRightPalmImageCrop(data?.detailed_results?.palm_analysis?.right_palm?.image_crop)
+
     setLeftEyeImage(data?.detailed_results?.eye_analysis?.left_eye.image)
+    setLeftEyeImageCrop(data?.detailed_results?.eye_analysis?.left_eye.image_crop)
+
     setRightEyeImage(data?.detailed_results?.eye_analysis?.right_eye.image)
+    setRightEyeImageCrop(data?.detailed_results?.eye_analysis?.right_eye.image_crop)
+
     SetUserPersonalDetails([
       { id: 1, title: "Name", value: data?.name },
       { id: 2, title: "Roll No. / Employee ID", value: data?.employeeId },
       { id: 3, title: "ID", value: data?.donorId },
       { id: 4, title: "Mobile Number", value: data?.mobileNo },
-      { id: 5, title: "HB Value", value: data?.hBValue },
+      { id: 5, title: "DOB", value: formatDate(data?.dob) },
+
     ])
     SetuserMedicalDetail([
-      { id: 1, title: "DOB", value: formatDate(data?.dob) },
       { id: 2, title: "Blood Group", value: data?.bloodGroup },
       { id: 3, title: "Sex", value: data?.sex },
       { id: 4, title: "Height", value: data?.height },
       { id: 5, title: "Weight", value: data?.weight },
+      { id: 1, title: "HB Value", value: data?.hBValue },
+
     ])
   }, [data])
   return (
@@ -73,26 +92,8 @@ const PatientDetail = () => {
             </div>
           </div>
 
-          {/* Palm & Nailbed Images */}
-          <div className="bg-white rounded-lg h-[25rem]">
-            <div className="p-4">
-              <h1 className="text-[20px] font-bold text-center font-urbanist">
-                Palm & Nailbed Images
-              </h1>
-            </div>
-            <hr />
-            <div className="flex h-[21rem] p-4 overflow-hidden">
-              <div className="flex justify-center items-center w-[49%]">
-                <img src={leftPalmImage} alt="Palm" className="max-h-full object-contain" />
-              </div>
-              <div className="w-[1px] border h-full"></div>
-              <div className="flex justify-center items-center w-[49%] pl-4">
-                <img src={rightPalmImage} alt="Nailbed" className="max-h-full object-contain" />
-              </div>
-            </div>
-          </div>
 
-          {/* Medical Details */}
+            {/* Medical Details */}
           <div className="bg-white rounded-lg h-[25rem]">
             <div className="p-4">
               <h1 className="text-[20px] font-bold font-urbanist">Medical Details</h1>
@@ -105,10 +106,50 @@ const PatientDetail = () => {
             </div>
           </div>
 
+          {/* Palm & Nailbed Images */}
+          <div className="bg-white rounded-lg h-[25rem]">
+            <div className="p-4">
+              <h1 className="text-[20px] font-bold text-center font-urbanist">
+                Left Palm
+              </h1>
+            </div>
+            <hr />
+            <div className="flex h-[21rem] p-4 overflow-hidden">
+              <div className="flex justify-center items-center w-[49%]">
+                <img src={leftPalmImage} alt="Palm" className="max-h-full object-contain" />
+              </div>
+              <div className="w-[1px] border h-full"></div>
+              <div className="flex justify-center items-center w-[49%] pl-4">
+                <img src={rightPalmImageCrop} alt="Nailbed" className="max-h-full object-contain" />
+              </div>
+            </div>
+          </div>
+
+
+           <div className="bg-white rounded-lg h-[25rem]">
+            <div className="p-4">
+              <h1 className="text-[20px] font-bold text-center font-urbanist">
+                Right Palm
+              </h1>
+            </div>
+            <hr />
+            <div className="flex h-[21rem] p-4 overflow-hidden">
+              <div className="flex justify-center items-center w-[49%]">
+                <img src={leftPalmImage} alt="Palm" className="max-h-full object-contain" />
+              </div>
+              <div className="w-[1px] border h-full"></div>
+              <div className="flex justify-center items-center w-[49%] pl-4">
+                <img src={rightPalmImageCrop} alt="Nailbed" className="max-h-full object-contain" />
+              </div>
+            </div>
+          </div>
+
+        
+
           {/* Eyes Images */}
           <div className="bg-white rounded-lg h-[25rem]">
             <div className="p-4">
-              <h1 className="text-[20px] text-center font-bold font-urbanist">Eyes Images</h1>
+              <h1 className="text-[20px] text-center font-bold font-urbanist">Left Eye</h1>
             </div>
             <hr />
             <div className="flex h-[21rem] p-4 overflow-hidden">
@@ -117,7 +158,23 @@ const PatientDetail = () => {
               </div>
               <div className="w-[1px] border h-full"></div>
               <div className="flex justify-center items-center w-[49%] pl-4">
-                <img src={rightEyeImage} alt="Right Eye" className="max-h-full object-contain" />
+                <img src={rightEyeImageCrop} alt="Right Eye" className="max-h-full object-contain" />
+              </div>
+            </div>
+          </div>
+
+            <div className="bg-white rounded-lg h-[25rem]">
+            <div className="p-4">
+              <h1 className="text-[20px] text-center font-bold font-urbanist">Right Eye</h1>
+            </div>
+            <hr />
+            <div className="flex h-[21rem] p-4 overflow-hidden">
+              <div className="flex justify-center items-center w-[49%]">
+                <img src={leftEyeImage} alt="Left Eye" className="max-h-full object-contain" />
+              </div>
+              <div className="w-[1px] border h-full"></div>
+              <div className="flex justify-center items-center w-[49%] pl-4">
+                <img src={rightEyeImageCrop} alt="Right Eye" className="max-h-full object-contain" />
               </div>
             </div>
           </div>
@@ -128,7 +185,7 @@ const PatientDetail = () => {
 
         {/* Heartbeat Badge */}
         <div
-          className="lg:absolute lg:w-[12rem] lg:h-[12rem] lg:rounded-full 
+          className="lg:absolute lg:w-[10rem] lg:h-[10rem] lg:rounded-full 
           lg:top-1/2 lg:left-1/2 transform -translate-x-1/2 -translate-y-1/2
           bg-red-600 border-[1rem] border-[#F6EDED] text-white 
           font-bold font-urbanist text-[1.5rem] flex justify-center items-center 
