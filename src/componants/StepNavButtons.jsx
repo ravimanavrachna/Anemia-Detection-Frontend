@@ -16,12 +16,12 @@ const StepNavButtons = ({ prevUrl,isNextRedirect=true, nextEvent, nextUrl, disab
   }
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 px-6 py-4 flex justify-between items-center">
+    <div className="absolute bottom-0 left-0 right-0 px-6 py-4 flex justify-between items-center pointer-events-none">
       {/* Previous Button */}
       <button
         onClick={() => { prevUrl && navigate(prevUrl) }}
         disabled={disablePrev || !prevUrl}
-        className={`flex items-center gap-2 px-5 py-2 rounded-lg font-semibold shadow-lg transition-all duration-300 
+        className={`flex items-center gap-2 px-5 py-2 rounded-lg font-semibold shadow-lg transition-all duration-300 pointer-events-auto
           ${disablePrev || !prevUrl
             ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
             : 'bg-red-600 hover:bg-red-700 text-white'}
@@ -34,7 +34,7 @@ const StepNavButtons = ({ prevUrl,isNextRedirect=true, nextEvent, nextUrl, disab
       <button
         onClick={nextClickHandler}
         disabled={disableNext || !nextUrl}
-        className={`flex items-center gap-2 px-5 py-2 rounded-lg font-semibold shadow-lg transition-all duration-300 
+        className={`flex items-center gap-2 px-5 py-2 rounded-lg font-semibold shadow-lg transition-all duration-300 pointer-events-auto
           ${disableNext || !nextUrl
             ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
             : 'bg-red-600 hover:bg-red-700 text-white'}

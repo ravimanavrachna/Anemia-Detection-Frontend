@@ -1,7 +1,7 @@
 import React from "react";
 import ApexCharts from "react-apexcharts";
 
-const BloodGroupBarGraph = () => {
+const BloodGroupBarGraph = ({categories,data}) => {
   const options = {
     colors: ["#D32F2F"], // Red color for blood group bars
     chart: { 
@@ -21,7 +21,7 @@ const BloodGroupBarGraph = () => {
     stroke: { show: true, width: 2, colors: ["transparent"] },
     xaxis: {
         title: { text: "Blood Groups" },
-      categories: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],
+      categories: categories,
       labels: {
         style: { fontSize: "14px", fontWeight: 500 },
       },
@@ -37,7 +37,8 @@ const BloodGroupBarGraph = () => {
   const series = [
     {
       name: "No. of People",
-      data: [85, 30, 100, 20, 80, 15, 45, 18], // Sample data
+      // data: [85, 30, 100, 20, 80, 15, 45, 18], // Sample data data
+      data: data, // Sample data data
     },
   ];
 

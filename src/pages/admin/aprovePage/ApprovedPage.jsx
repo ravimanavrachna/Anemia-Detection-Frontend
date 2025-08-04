@@ -10,11 +10,11 @@ const ApprovedPage = () => {
 
   // const url = ${apiHost}/api/admin/approvals;
 
-  const { data, loading, error } = useGet("api/admin/approvals", {
+  const { data, loading, error } = useGet("api/admin/doctor/approval/list", {
     params: { limit, offset },
   });
 
-  const { patchData, loading: patchLoading } = usePatch("api/admin/verify");
+  const { patchData, loading: patchLoading } = usePatch("api/admin/doctor/approve");
 
   // console.log("data", data); for checking purpose only.
 

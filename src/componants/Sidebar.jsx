@@ -16,7 +16,7 @@ export default function Sidebar() {
   // 🟢 Menu definitions
   const adminMenu = [
     { name: "Admin Dashboard", path: "/admin/dashboard", icon: <Home size={20} /> },
-    { name: "All Donor", path: "/donor/all-donor", icon: <Users size={20} /> },
+    { name: "All Donor", path: "/admin/donor/all-donor", icon: <Users size={20} /> },
     { name: "Block", path: "/admin/block", icon: <Users size={20} /> },
     { name: "Approval", path: "/admin/approval", icon: <Users size={20} /> },
   ];

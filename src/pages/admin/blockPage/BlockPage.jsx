@@ -8,7 +8,7 @@ const BlockPage = () => {
   const navigate = useNavigate();
 
   // fetch data from backend
-  const { data, loading, error } = useGet("api/admin/block"); // 👈 update API endpoint as needed
+  const { data, loading, error } = useGet("api/admin/doctor/list"); // 👈 update API endpoint as needed
 
   if (loading) return <div>Loading blocks...</div>;
   if (error) return <div>Error loading blocks: {error.message}</div>;

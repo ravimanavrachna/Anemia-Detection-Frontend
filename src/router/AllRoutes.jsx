@@ -17,6 +17,7 @@ import BlockPageDetails from "../pages/admin/blockPage/BlockPageDetails";
 import ProfilePage from "../pages/profile/ProfilePage";
 import useGet from "../hooks/useGet";
 import Unauthorized from "../componants/Unauthorized";
+import AdminAllDonor from "../pages/admin/adminAllDonor/AdminAllDonor";
 
 const isAuthenticated = () => {
   const token = sessionStorage.getItem("authToken");
@@ -74,6 +75,10 @@ const AllRoutes = () => {
       <Route
         path="/admin/block/:doctorID"
         element={<PrivateRoute element={<BlockPageDetails />} />}
+      />
+       <Route
+        path="/admin/donor/all-donor"
+        element={<PrivateRoute element={<AdminAllDonor />} />}
       />
 
       <Route

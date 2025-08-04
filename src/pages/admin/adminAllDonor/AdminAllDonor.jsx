@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import PageTitle from '../../componants/PageTitle';
-import Pagination from '../../componants/Pagination';
-import useGet from '../../hooks/useGet';
 import { useNavigate } from 'react-router';
-import { calculateAge } from '../../utils/dateFormatter';
+import useGet from '../../../hooks/useGet';
+import PageTitle from '../../../componants/PageTitle';
+import Pagination from '../../../componants/Pagination';
+import { calculateAge } from '../../../utils/dateFormatter';
 
-const ViewPatient = () => {
+const AdminAllDonor = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
@@ -16,13 +16,15 @@ const ViewPatient = () => {
 
   const limit = pageSize;
   const offset = (currentPage - 1) * pageSize;
-  const { data } = useGet(`api/donor/list`);
+//   const { data } = useGet(`api/donor/list?limit=${limit}&offset=${offset}`);
+  const { data } = useGet(`api/admin/donor/list`);
   const donors = data?.donors?.donorList || [];
 
   const searchedDonors = donors.filter((donor) =>
     donor.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const paginatedDonors = searchedDonors.slice(offset, offset + limit);
+console.log(data);
 
   return (
     <div>
@@ -144,4 +146,4 @@ const ViewPatient = () => {
   );
 };
 
-export default ViewPatient;
+export default AdminAllDonor;
