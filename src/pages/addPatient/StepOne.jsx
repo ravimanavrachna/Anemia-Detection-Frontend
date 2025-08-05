@@ -35,7 +35,7 @@ const StepOne = () => {
 
       <StepperProgress currentStep={currentStep} />
 
-      {/* Upload Sections */}
+      {/* Upload Sections asdfasf */}
       <div className="grid grid-cols-1 lg:grid lg:grid-cols-2 items-center gap-12 mt-10">
         <ImageUploadSection img={left_palm} error={error.left_palm} name="left_palm" saveImage={saveImage} title="Left Palm" />
         <ImageUploadSection img={right_palm} error={error.right_palm} name="right_palm" saveImage={saveImage} title="Right Palm" />
