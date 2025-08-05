@@ -81,9 +81,9 @@ const ImageUploadSection = ({ title,img, name, saveImage, onApiCall,error }) => 
       {/* Animated Preview or Upload Section */}
       <div className="transition-opacity duration-500 ease-in-out">
         {!imageUploaded ? (
-          <div className="flex flex-col md:flex-row items-center justify-center gap-10 animate-fadeIn">
+          <div className="flex  flex-col md:flex-row items-center justify-center gap-10 animate-fadeIn">
             {/* Upload Box */}
-            <label className="flex flex-col items-center justify-center border-2 border-dashed border-red-400 rounded-xl p-5 w-64 h-56 cursor-pointer hover:bg-red-50 transition-all">
+            <label className="flex hidden lg:block flex-col items-center justify-center border-2 border-dashed border-red-400 rounded-xl p-5 w-64 h-56 cursor-pointer hover:bg-red-50 transition-all">
               <img
                 src="/images/hand-placeholder.png"
                 alt="Upload Preview"
