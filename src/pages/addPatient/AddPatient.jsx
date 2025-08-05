@@ -55,7 +55,7 @@ const bloodGroupHandler=(value)=>{
     }
   }
   return (
-    <div>
+    <div className="relative">
       <StepperProgress />
       <div className="bg-white overflow-auto rounded-lg p-4 mt-4 font-urbanist">
         <h2 className="text-3xl font-bold mb-6 text-center text-red-500">
@@ -97,9 +97,9 @@ const bloodGroupHandler=(value)=>{
               {form.bloodGroup ? form.bloodGroup : "Select blood group"}
             </div>
             {showBloodGroups && <div className="relative w-full" >
-              <div  id="" className="absolute top-0 left-0 w-full border rounded-md bg-white" >
+              <div  id="" className="absolute top-0 left-0 w-full h-[10rem] overflow-auto border rounded-md bg-white" >
                 {validGroups.map((bloodGroup) => {
-                  return <div onClick={()=>{bloodGroupHandler(bloodGroup)}} value={"bloodGroup"} name={bloodGroup} className="w-full hover:bg-blue-100 p-2"
+                  return <div onClick={()=>{bloodGroupHandler(bloodGroup)}} value={"bloodGroup"} name={bloodGroup} className="w-full  hover:bg-blue-100 p-2"
                   >{bloodGroup}</div>
                 })}
               </div>
@@ -109,7 +109,7 @@ const bloodGroupHandler=(value)=>{
           <div>
             <label className="block text-red-800 font-semibold mb-1">Role</label>
             <div className="grid grid-cols-3 mt-1">
-              {["Student", "Doctor"].map((value) => (
+              {["Student", "Faculty"].map((value) => (
                 <label key={value} className="flex items-center space-x-2">
                   <input
                     type="radio"
@@ -144,52 +144,18 @@ const bloodGroupHandler=(value)=>{
             {error.sex && <div className="text-red-400" >{error.sex}</div>}
 
           </div>
-
-
-
-          {/* <div>
-            <label className="block text-red-800 font-semibold mb-1">
-              Age Group
-            </label>
-            a
-            <div className="grid grid-cols-2 gap-6 mt-1">
-              {["16–17 years", "18–60 years", "60–65 years", "65+ years"].map(
-                (value) => (
-                  <label key={value} className="flex items-center space-x-1">
-                    <input
-                      type="radio"
-                      name="ageGroup"
-                      value={value}
-                      onChange={handleChange}
-                    />
-                    <span className="text-sm">{value}</span>
-                  </label>
-                )
-              )}
-            </div>
-          </div> */}
         </form>
       </div>
 
 
-      <StepNavButtons
+     <div className=" w-full">
+       <StepNavButtons
         nextEvent={nextEventHandler}
         nextUrl={`/donor/add-donor/upload-palm-image`}
         prevUrl={null}
       />
+     </div>
 
-
-
-
-      {/* <div className="flex justify-center my-10">
-        <button
-          type="button"
-          // onClick={handleSubmit}
-          className="bg-red-600 text-white px-8 py-2 rounded-lg"
-        >
-          Submit & Save
-        </button>
-      </div> */}
     </div>
   );
 };

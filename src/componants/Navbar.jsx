@@ -50,8 +50,8 @@ const Navbar = () => {
     <div className='w-full flex justify-between items-center lg:grid lg:grid-cols-3 py-2 sm:py-4  lg:py-6 z-50'>
 
       <div className='flex '>
-        <div className='lg:hidden block text-white'>
-          Blood Camp
+        <div className='lg:hidden capitalize block pl-14 text-white'>
+          anemoscan
         </div>
         <div className='bg-white hidden md:block py-2 pl-2 rounded-xl w-[80%] md:flex justify-start items-center gap-4'>
           <div><SearchIcon /></div>

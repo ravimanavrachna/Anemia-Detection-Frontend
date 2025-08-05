@@ -16,7 +16,7 @@ const StepNavButtons = ({ prevUrl,isNextRedirect=true, nextEvent, nextUrl, disab
   }
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 px-6 py-4 flex justify-between items-center pointer-events-none">
+    <div className=" px-6 py-4 flex justify-between items-center pointer-events-none">
       {/* Previous Button */}
       <button
         onClick={() => { prevUrl && navigate(prevUrl) }}
