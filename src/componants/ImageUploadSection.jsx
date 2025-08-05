@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Camera, X, Trash2 } from "lucide-react";
 
-const ImageUploadSection = ({ title,img, name, saveImage, onApiCall }) => {
+const ImageUploadSection = ({ title,img, name, saveImage, onApiCall,error }) => {
   const [preview, setPreview] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [streaming, setStreaming] = useState(false);
@@ -158,6 +158,9 @@ const ImageUploadSection = ({ title,img, name, saveImage, onApiCall }) => {
           </a>
         </p>
       )}
+      {error&&<div className="text-red-400">
+       {error}
+      </div>}
     </div>
   );
 };

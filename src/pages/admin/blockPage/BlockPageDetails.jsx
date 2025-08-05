@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PageTitle from "../../../componants/PageTitle.jsx";
 import DoctorImage from "../../../assets/DashboardDocterCartoon.png";
 import BloodGroupBarGraph from "../../dashboard/BloodGroupBarGraph.jsx";
@@ -6,12 +6,20 @@ import BloodGroupDonutChart from "../../dashboard/BloodGroupDonutChart.jsx";
 import { HoverAnimation } from "../../../componants/CommonStyle";
 import { useParams } from "react-router-dom";
 import useGet from "../../../hooks/useGet";
+const validGroups = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"];
 
 const BlockPageDetails = () => {
   const { doctorID } = useParams();
-  const { data, loading, error } = useGet(`api/admin/block/${doctorID}`);
-  console.log(data);
-  const block = data?.[0];
+  const { data, loading, error } = useGet(`api/admin/doctor/dashboard/${doctorID}`);
+    const [bloodSeries, setBloodSeries] = useState([85, 30, 100, 20, 80, 15, 45, 18]);
+  
+  // console.log(data);
+   useEffect(() => {
+      if(data?.bloodGroupStats){
+      setBloodSeries(validGroups.map(group => data.bloodGroupStats[group]))
+  
+      }
+    }, [data])
   if (loading) return <div>Loading block details...</div>;
   if (error) return <div>Error loading block details: {error}</div>;
 
@@ -28,7 +36,7 @@ const BlockPageDetails = () => {
                 Good Morning
                 <br />
                 <span className="text-red-700">
-                  {block.name || "Block Name"}
+                  {data.doctor.name || "Block Name"}
                 </span>
               </h1>
               <p className="text-gray-600 mt-2 text-lg">
@@ -49,20 +57,20 @@ const BlockPageDetails = () => {
           <div className="lg:grid lg:grid-cols-3 grid grid-cols-1 sm:grid sm:grid-cols-2 md:grid md:grid-cols-3 gap-4  my-4">
             <div className={`bg-white shadow-md rounded-[14px] p-4 `}>
               <h1 className="text-[75px] font-urbanist font-bold text-red-600">
-                {block?.totalAnemic || 0}
+                {data?.totalAnemic || 0}
               </h1>
               <p>Anemic Donor</p>
             </div>
             <div className={`bg-white shadow-md rounded-[14px] p-4 `}>
               <h1 className="text-[75px] font-urbanist font-bold text-red-600">
-                {block?.totalNonAnemic || 0}
+                {data?.totalNonAnemic || 0}
               </h1>
 
               <p>Non- Anemic Donor</p>
             </div>
             <div className=" shadow-md rounded-[14px] bg-gradient-to-br from-red-500 to-red-900 p-4">
               <h1 className="text-[75px] font-urbanist font-bold text-white">
-                {block?.totalDonor || 0}
+                {data?.totalDonor || 0}
               </h1>
 
               <p className="text-white">Total Donor</p>
@@ -123,8 +131,8 @@ const BlockPageDetails = () => {
           </div>
         </div>
         <div className="w-full lg:w-[40%] rounded-[20px] p-4 mb-4 bg-white">
-          <BloodGroupBarGraph />
-          <BloodGroupDonutChart />
+          <BloodGroupBarGraph categories={validGroups} data={bloodSeries} />
+          <BloodGroupDonutChart categories={validGroups} data={bloodSeries} />
         </div>
       </div>
     </div>

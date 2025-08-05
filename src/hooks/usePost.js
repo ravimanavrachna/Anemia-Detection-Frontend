@@ -28,6 +28,8 @@ const usePost = (url) => {
     } catch (err) {
       const apiError = err?.response?.data || "Something went wrong!";
       setError(apiError);
+      console.log(err);
+      
       return { error: apiError };
 
     } finally {

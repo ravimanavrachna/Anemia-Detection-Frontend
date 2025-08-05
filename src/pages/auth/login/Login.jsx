@@ -46,7 +46,7 @@ const Login = () => {
     const result = await postData(formData);
 
     if (result?.error?.error) {
-      console.log("res", result)
+      // console.log("res", result)
       if (result?.error?.error === 'User OTP not verified') {
         navigate('/otp', { state: { mobile: formData.mobile } });
       }
@@ -56,8 +56,8 @@ const Login = () => {
       const userType = result?.userType;
 
 
-      console.log("Token", result)
-      console.log("Token", token)
+      // console.log("Token", result)
+      // console.log("Token", token)
       if (token) {
         sessionStorage.setItem('authToken', token); 
         sessionStorage.setItem('userType', userType); 

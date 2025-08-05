@@ -8,3 +8,20 @@ export function formatDate(isoDateStr) {
     year: "numeric",
   });
 }
+export function calculateAge(dobString) {
+  const dob = new Date(dobString);
+  const today = new Date();
+
+  let age = today.getFullYear() - dob.getFullYear();
+
+  // Check if birthday has not occurred yet this year
+  const hasBirthdayPassedThisYear =
+    today.getMonth() > dob.getMonth() ||
+    (today.getMonth() === dob.getMonth() && today.getDate() >= dob.getDate());
+
+  if (!hasBirthdayPassedThisYear) {
+    age--;
+  }
+
+  return age;
+}

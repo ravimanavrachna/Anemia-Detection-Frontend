@@ -8,10 +8,14 @@ import StepperProgress from "../../componants/StepperProgress";
 import StepNavButtons from "../../componants/StepNavButtons";
 import { useDispatch } from "react-redux";
 import { saveDonorDetails } from "../../redux/donorReducer";
+import { addPatientDetailsValidation } from "../../utils/addPatientValidation";
+const validGroups = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"];
 
 const AddPatient = () => {
   const dispatch = useDispatch()
   //message:"Missing required fields: name, role, mobileNo, dob, height, weight, sex, block, bloodGroup"
+  const [error, setError] = useState({})
+  const [showBloodGroups, setShowBloodGroups] = useState(false)
   const [form, setForm] = useState({
     name: "",
     role: "",
@@ -27,19 +31,28 @@ const AddPatient = () => {
     bloodGroup: "",
     doctorName: "",
     date: Date.now(),
-    donorID: Math.random() + Date.now(),
     nailStatus: "",
     palmStatus: "",
     hBValue: "",
-    // totalAnemicStatus: "Anemic",
   });
-
+const bloodGroupHandler=(value)=>{
+  setForm({ ...form, bloodGroup:value });
+  setShowBloodGroups(false)
+}
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const nextEventHandler = () => {
-    dispatch(saveDonorDetails(form))
+    const { isValid, errors } = addPatientDetailsValidation(form);
+    if (isValid) {
+      dispatch(saveDonorDetails(form))
+    } else {
+      setError(errors)
+      console.log(errors);
+      // alert("Required all feilds");
+      throw new Error("Required all feilds")
+    }
   }
   return (
     <div>
@@ -59,10 +72,8 @@ const AddPatient = () => {
             },
             { label: "DOB", name: "dob", type: "date" },
             { label: "Weight", name: "weight", placeholder: "Kg" },
-            { label: "Blood Group", name: "bloodGroup" },
+            // { label: "Blood Group", name: "bloodGroup" },
             { label: "Mobile Number", name: "mobileNo" },
-            { label: "Block", name: "block" },
-            { label: "Role", name: "role" },
           ].map(({ label, name, type = "text", placeholder = "" }) => (
             <div key={name}>
               <label className="block text-red-800 font-semibold mb-1">
@@ -75,8 +86,45 @@ const AddPatient = () => {
                 className="w-full border rounded-md p-2"
                 onChange={handleChange}
               />
+              {error[name] && <div className="text-red-400" >{error[name]}</div>}
             </div>
           ))}
+          <div>
+            <label className="block text-red-800 font-semibold mb-1">
+              Blood Group
+            </label>
+            <div onClick={() => { setShowBloodGroups((pre) => !pre) }} className="w-full border rounded-md p-2" >
+              {form.bloodGroup ? form.bloodGroup : "Select blood group"}
+            </div>
+            {showBloodGroups && <div className="relative w-full" >
+              <div  id="" className="absolute top-0 left-0 w-full border rounded-md bg-white" >
+                {validGroups.map((bloodGroup) => {
+                  return <div onClick={()=>{bloodGroupHandler(bloodGroup)}} value={"bloodGroup"} name={bloodGroup} className="w-full hover:bg-blue-100 p-2"
+                  >{bloodGroup}</div>
+                })}
+              </div>
+            </div>}
+
+          </div>
+          <div>
+            <label className="block text-red-800 font-semibold mb-1">Role</label>
+            <div className="grid grid-cols-3 mt-1">
+              {["Student", "Doctor"].map((value) => (
+                <label key={value} className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="role"
+                    value={value}
+                    onChange={handleChange}
+                  />
+                  <span>{value}</span>
+                </label>
+              ))}
+
+            </div>
+            {error.role && <div className="text-red-400" >{error.role}</div>}
+
+          </div>
 
           <div>
             <label className="block text-red-800 font-semibold mb-1">Sex</label>
@@ -93,9 +141,11 @@ const AddPatient = () => {
                 </label>
               ))}
             </div>
+            {error.sex && <div className="text-red-400" >{error.sex}</div>}
+
           </div>
 
-          
+
 
           {/* <div>
             <label className="block text-red-800 font-semibold mb-1">

@@ -7,11 +7,13 @@ import { HoverAnimation } from "../../../componants/CommonStyle.jsx";
 import { ArrowBigRightDash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useGet from "../../../hooks/useGet.js";
+const validGroups = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"];
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
 
   const [userName, setUserName] = useState("");
+  const [bloodSeries, setBloodSeries] = useState([85, 30, 100, 20, 80, 15, 45, 18]);
 
   // Get logged-in user from localStorage
   useEffect(() => {
@@ -19,30 +21,28 @@ const AdminDashboard = () => {
       // JSON.parse(localStorage.getItem("user")) ||
       JSON.parse(localStorage.getItem("admin"));
     // console.log("LocalStorage User:", user); // Debug
-    if (user && user.name) {
+    if (user && user.name) { 
       setUserName(user.name);
     }
   }, []);
 
-  const { data, loading, error } = useGet("api/admin/block");
-  console.log("Blocks API:", {data,loading,error});
 
+  // const { data, loading, error } = useGet("api/admin/doctor/list"); 
+  const { data, loading, error } = useGet("api/admin/dashboard");
+  useEffect(() => {
+    if(data?.bloodGroupStats){
+    setBloodSeries(validGroups.map(group => data.bloodGroupStats[group]))
+
+    }
+  }, [data])
+
+  //dashboard
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading dashboard: {error}</div>;
 
   const blocks = data ?? [];
+  // console.log(data);
 
-  // Calculate summary totals
-  const summary = {
-    anemic: blocks.reduce((sum, b) => sum + (parseInt(b.totalAnemic) || 0), 0),
-    nonAnemic: blocks.reduce(
-      (sum, b) => sum + (parseInt(b.totalNonAnemic) || 0),
-      0
-    ),
-    total: blocks.reduce((sum, b) => sum + (parseInt(b.totalDonor) || 0), 0),
-  };
-
-  const totalDonors = summary.total;
 
   // Patients section (empty until backend sends data)
   const recentPatients = [];
@@ -79,19 +79,19 @@ const AdminDashboard = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 my-4">
             <div className="bg-white shadow-md rounded-[14px] p-4">
               <h1 className="text-[75px] font-urbanist font-bold text-red-600">
-                {summary.anemic}
+                {data?.totalAnemic}
               </h1>
               <p>Anemic Donor</p>
             </div>
             <div className="bg-white shadow-md rounded-[14px] p-4">
               <h1 className="text-[75px] font-urbanist font-bold text-red-600">
-                {summary.nonAnemic}
+                {data?.totalNonAnemic}
               </h1>
               <p>Non-Anemic Donor</p>
             </div>
             <div className="shadow-md rounded-[14px] bg-gradient-to-br from-red-500 to-red-900 p-4">
               <h1 className="text-[75px] font-urbanist font-bold text-white">
-                {totalDonors}
+                {data.totalDonor}
               </h1>
               <p className="text-white">Total Donor</p>
             </div>
@@ -147,15 +147,15 @@ const AdminDashboard = () => {
 
         {/* Charts */}
         <div className="w-full lg:w-[40%] rounded-[20px] p-4 mb-4 bg-white">
-          <BloodGroupBarGraph />
-          <BloodGroupDonutChart />
+          <BloodGroupBarGraph categories={validGroups} data={bloodSeries} />
+          <BloodGroupDonutChart categories={validGroups} data={bloodSeries} />
         </div>
       </div>
 
       {/* Block Data */}
       <div className="w-full grid grid-cols-2 mb-10 gap-4 rounded-[24px]">
-        {blocks.length > 0 ? (
-          blocks.map((block, index) => (
+        {data && data.doctors? (
+          data.doctors.map((block, index) => (
             <div
               key={block._id || index}
               className="bg-white rounded-[24px] px-4 py-4"
@@ -165,7 +165,7 @@ const AdminDashboard = () => {
                   {block.name}
                 </div>
                 <div
-                  onClick={() => navigate(`/admin/block/${block.id}`)}
+                  onClick={() => navigate(`/admin/block/${block.doctorID}`)}
                   className="cursor-pointer"
                 >
                   <ArrowBigRightDash />

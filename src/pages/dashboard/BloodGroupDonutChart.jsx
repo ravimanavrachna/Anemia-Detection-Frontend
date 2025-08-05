@@ -1,14 +1,14 @@
 import React from "react";
 import ApexCharts from "react-apexcharts";
 
-const BloodGroupDonutChart = () => {
+const BloodGroupDonutChart = ({categories=["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],data=[22.5, 7.5, 25, 5, 20, 3.8, 12.5, 3.8]}) => {
   const options = {
     chart: {
       type: "donut",
     },
-    labels: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],
+    labels: categories,
     colors: ["#FF9F43", "#D32F2F", "#C62828", "#6D4C41", "#FF3D00", "#8D6E63", "#BF360C", "#E64A19"],
-    dataLabels: {
+    dataLabels: { 
       enabled: true,
       formatter: (val) => ` ${val.toFixed(1)}%`,
     },
@@ -17,7 +17,7 @@ const BloodGroupDonutChart = () => {
     },
   };
 
-  const series = [22.5, 7.5, 25, 5, 20, 3.8, 12.5, 3.8]; // Percentage values
+  const series = data; // Percentage values
 
   return (
     <div className="">
