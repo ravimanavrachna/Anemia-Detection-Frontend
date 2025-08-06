@@ -3,9 +3,18 @@ import { useEffect, useRef, useState } from "react";
 import { Home, MenuIcon, PlusCircle, Settings, Users } from "lucide-react";
 import LogOutModal from "../modal/LogOutModal";
 
-  const userType = sessionStorage.getItem("userType") // ✅ assuming profile API returns userType
-  // console.log("user tyoe" ,userType)
-  // 🟢 Menu definitions
+export default function MobileSideBar() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
+  const [startX, setStartX] = useState(null);
+  const sidebarRef = useRef(null);
+
+  // ✅ Get userType safely and parse
+  const userType = parseInt(sessionStorage.getItem("userType"));
+  console.log("userType:", userType);
+
+  // 🟢 Define menus inside component
   const adminMenu = [
     { name: "Admin Dashboard", path: "/admin/dashboard", icon: <Home size={20} /> },
     { name: "All Donor", path: "/admin/donor/all-donor", icon: <Users size={20} /> },
@@ -21,26 +30,16 @@ import LogOutModal from "../modal/LogOutModal";
 
   // 🟢 Combine menus based on userType
   let menuItems = [];
-  if (userType == 1) {
+  if (userType === 1) {
     menuItems = adminMenu;
-  } else if (userType == 2) {
+  } else if (userType === 2) {
     menuItems = doctorMenu;
   }
 
-export default function MobileSideBar() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [isOpen, setIsOpen] = useState(false);
-  const [startX, setStartX] = useState(null);
-  const sidebarRef = useRef(null);
-
-  // Close sidebar when clicking outside
+  // 📌 Click outside to close sidebar
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (
-        sidebarRef.current &&
-        !sidebarRef.current.contains(e.target)
-      ) {
+      if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
         setIsOpen(false);
       }
     };
@@ -48,7 +47,7 @@ export default function MobileSideBar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  // Touch gesture handling for swipe from left to open
+  // 📌 Swipe to open sidebar
   useEffect(() => {
     const handleTouchStart = (e) => {
       setStartX(e.touches[0].clientX);
@@ -73,12 +72,12 @@ export default function MobileSideBar() {
 
   return (
     <>
-      {/* Hamburger button */}
+      {/* Hamburger */}
       <button
         onClick={toggleSidebar}
         className="fixed top-3 left-3 z-50 bg-white text-red-500 p-2 rounded-md md:hidden"
       >
-        <MenuIcon/>
+        <MenuIcon />
       </button>
 
       {/* Backdrop */}
@@ -100,14 +99,13 @@ export default function MobileSideBar() {
           Blood Camp
         </div>
 
-        {/* Navigation Items */}
         <nav className="flex flex-col gap-1 px-6">
-          {menuItems.map((item, index) => (
+          {menuItems.map((item) => (
             <div
               key={item.path}
               onClick={() => {
                 navigate(item.path);
-                setIsOpen(false); // Close sidebar after navigation
+                setIsOpen(false);
               }}
               className={`flex items-center gap-3 py-3 px-4 rounded-lg cursor-pointer transition-all duration-300 ${
                 location.pathname === item.path
@@ -121,7 +119,6 @@ export default function MobileSideBar() {
           ))}
         </nav>
 
-        {/* Logout */}
         <div className="absolute bottom-6 left-6 right-6">
           <LogOutModal />
         </div>
