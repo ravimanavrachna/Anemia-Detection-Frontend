@@ -7,6 +7,7 @@ import { HoverAnimation } from "../../../componants/CommonStyle.jsx";
 import { ArrowBigRightDash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useGet from "../../../hooks/useGet.js";
+import MainPage from "../../../componants/MainPage.jsx";
 const validGroups = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"];
 
 const AdminDashboard = () => {
@@ -49,6 +50,7 @@ const AdminDashboard = () => {
 
   return (
     <div>
+          {/* <MainPage /> */}
       <PageTitle title="Admin Dashboard" />
 
       <div className="lg:flex w-full gap-4 mt-4">

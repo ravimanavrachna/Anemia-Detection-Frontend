@@ -5,6 +5,7 @@ import Sidebar  from "./componants/Sidebar";
 import AllRoutes from "./router/AllRoutes";
 import Navbar from "./componants/Navbar"
 import MobileSideBar from "./componants/MobileSideBar";
+import MainPage from "./componants/MainPage";
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
 
   return (
     <div>
+      
       {screenWidth > 1024 ? (
         <div className='relative flex overflow'>
           {location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/otp" && (
@@ -55,6 +57,7 @@ function App() {
             )}
 
               <div className="">
+            {/* { location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/otp" &&   <MainPage />} */}
               <AllRoutes />
               </div>
       
@@ -68,7 +71,8 @@ function App() {
             </div>
           )}
           <div className={` ${location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/otp" ? 'mt-[3rem] px-4 py-4' : ' '} bg-[#F6EDED]`}>
-         
+                    {/* { location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/otp" &&   <MainPage />} */}
+
                 <AllRoutes />
 
                 {location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/otp" && (
