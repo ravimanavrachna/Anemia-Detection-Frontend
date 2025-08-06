@@ -4,7 +4,7 @@ import useGet from "../../../hooks/useGet";
 import usePatch from "../../../hooks/usePatch";
 
 const ApprovedPage = () => {
-  const limit = 10;
+  const limit = 1000;
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
 
