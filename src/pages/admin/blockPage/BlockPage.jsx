@@ -18,7 +18,7 @@ const BlockPage = () => {
       <PageTitle title="Blocks" />
 
       <div className="w-full grid grid-cols-2 gap-4 mb-10 rounded-[24px]">
-        {data?.map((block) => (
+        {data?.doctors?.map((block) => (
           <div
             key={block.doctorID}
             className="bg-white rounded-[24px] px-4 py-4"

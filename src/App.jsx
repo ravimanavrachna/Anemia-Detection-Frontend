@@ -1,17 +1,21 @@
 import { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router";
 import "./App.css";
-import Sidebar  from "./componants/Sidebar";
+import Sidebar from "./componants/Sidebar";
 import AllRoutes from "./router/AllRoutes";
 import Navbar from "./componants/Navbar"
 import MobileSideBar from "./componants/MobileSideBar";
 import MainPage from "./componants/MainPage";
+import useGet from "./hooks/useGet";
 
 
 function App() {
   const location = useLocation();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const debounceTimeout = useRef(null);
+
+
+  // Update access state based on response
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,19 +39,19 @@ function App() {
 
   return (
     <div>
-      
+
       {screenWidth > 1024 ? (
         <div className='relative flex overflow'>
           {location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/otp" && (
             <div className={`w-[30%] lg:w-[25%] xl:w-[20%]  h-[100vh] absolute left-0 pr-10 bg-white lg:bg-[#F6EDED]`}>
-              <Sidebar/>
+              <Sidebar />
             </div>
           )}
           <div
             className={
               location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/otp"
                 ? "w-[100%]"
-                :`w-[70%] lg:w-[75%] xl:w-[80%] pr-6 overflow-scroll h-[100vh]  absolute custom-scrollbar right-0 r bg-white lg:bg-[#F6EDED]`
+                : `w-[70%] lg:w-[75%] xl:w-[80%] pr-6 overflow-scroll h-[100vh]  absolute custom-scrollbar right-0 r bg-white lg:bg-[#F6EDED]`
             }
           >
             {location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/otp" && (
@@ -56,11 +60,11 @@ function App() {
               </div>
             )}
 
-              <div className="">
-            {/* { location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/otp" &&   <MainPage />} */}
+            <div className="">
+              { location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/otp"   }
               <AllRoutes />
-              </div>
-      
+            </div>
+
           </div>
         </div>
       ) : (
@@ -71,17 +75,17 @@ function App() {
             </div>
           )}
           <div className={` ${location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/otp" ? 'mt-[3rem] px-4 py-4' : ' '} bg-[#F6EDED]`}>
-                    {/* { location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/otp" &&   <MainPage />} */}
+            { location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/otp" }
 
-                <AllRoutes />
+            <AllRoutes />
 
-                {location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/otp" && (
-            <div>
-                             <MobileSideBar/>
+            {location.pathname !== "/login" && location.pathname !== "/register" && location.pathname !== "/otp" && (
+              <div>
+                <MobileSideBar />
 
-            </div>
-          )}
-  
+              </div>
+            )}
+
           </div>
         </div>
       )}

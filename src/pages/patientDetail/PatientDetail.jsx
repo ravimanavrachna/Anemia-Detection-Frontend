@@ -4,6 +4,7 @@ import TitleAndValue from "../../componants/TitleAndValue";
 import useGet from "../../hooks/useGet";
 import { formatDate } from "../../utils/dateFormatter";
 import { useParams } from "react-router";
+import usePatch from "../../hooks/usePatch";
 const InitialUserPersonalDetails = [
   { id: 1, title: "Name", value: "data?.donor?.name" },
   { id: 2, title: "Roll No. / Employee ID", value: "data?.donor?.empID" },
@@ -20,7 +21,8 @@ const InitialuserMedicalDetail = [
 ];
 const PatientDetail = () => {
   const { donorId } = useParams();
-  const { data } = useGet(`api/donor/${donorId}`);
+  const { data,fetchdata } = useGet(`api/donor/${donorId}`);
+  const {patchData} =usePatch(`api/donor/hb`)
   const [UserPersonalDetails, SetUserPersonalDetails] = useState(
     InitialUserPersonalDetails
   );
@@ -49,7 +51,7 @@ const PatientDetail = () => {
       { id: 2, title: "Roll No. / Employee ID", value: data?.employeeId },
       { id: 3, title: "ID", value: data?.donorId },
       { id: 4, title: "Mobile Number", value: data?.mobileNo },
-      { id: 5, title: "HB Value", value: data?.hBValue },
+      { id: 5, title: "HB Value", value: data?.HbValue },
     ]);
     SetuserMedicalDetail([
       { id: 1, title: "DOB", value: formatDate(data?.dob) },
@@ -58,10 +60,17 @@ const PatientDetail = () => {
       { id: 4, title: "Height", value: data?.height },
       { id: 5, title: "Weight", value: data?.weight },
     ]);
+    // setHbValue(data?.HbValue)    
   }, [data]);
 
-  const handleUpdate = () => {
-    console.log("Updated Hb Value:", hbValue);
+  const handleUpdate = async () => {
+    try {
+      await patchData({HbValue:hbValue,_id:data?._id})
+      await fetchdata()
+    } catch (error) {
+      console.log(error);
+      
+    }
     setShowModal(false);
   };
   return (
