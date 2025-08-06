@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Login from "../pages/auth/login/Login";
@@ -18,6 +18,7 @@ import ProfilePage from "../pages/profile/ProfilePage";
 import useGet from "../hooks/useGet";
 import Unauthorized from "../componants/Unauthorized";
 import AdminAllDonor from "../pages/admin/adminAllDonor/AdminAllDonor";
+import MainPage from "../componants/MainPage";
 
 const isAuthenticated = () => {
   const token = sessionStorage.getItem("authToken");
@@ -25,11 +26,26 @@ const isAuthenticated = () => {
 };
 
 const PrivateRoute = ({ element }) => {
-  return isAuthenticated() ? element : <Navigate to="/login" />;
+  const approve = useGet("api/doctor/isapproved").data; // pass your actual endpoint
+  const [hasAccess, setHasAccess] = useState(false);
+  useEffect(() => {
+    if (approve?.access === true) {
+      setHasAccess(true);
+    } else {
+      setHasAccess(false);
+    }
+  }, [approve]);
+  if (!isAuthenticated()) {
+    return <Navigate to="/login" />
+  }
+  if (!hasAccess) {
+    return <MainPage />
+  }
+  return element;
 };
 
 const RoleBasedRoute = ({ element, allowedUserTypes }) => {
-  
+
   const { data, loading } = useGet("api/doctor/profile");
   const userType = sessionStorage.getItem("userType")
 
@@ -76,7 +92,7 @@ const AllRoutes = () => {
         path="/admin/block/:doctorID"
         element={<PrivateRoute element={<BlockPageDetails />} />}
       />
-       <Route
+      <Route
         path="/admin/donor/all-donor"
         element={<PrivateRoute element={<AdminAllDonor />} />}
       />
