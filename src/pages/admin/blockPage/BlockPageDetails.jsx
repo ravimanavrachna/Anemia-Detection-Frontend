@@ -82,26 +82,26 @@ const BlockPageDetails = () => {
               <h1 className="text-[25px]"> Recently Visited Patients</h1>
             </div>
 
-            <div class="overflow-x-auto">
-              <table class="w-full text-sm text-left text-gray-500 ">
-                <thead class="text-xs text-gray-700 bg-gray-50 ">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left text-gray-500 ">
+                <thead className="text-xs text-gray-700 bg-gray-50 ">
                   <tr>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" className="px-6 py-3">
                       Patients Name
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" className="px-6 py-3">
                       ID
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" className="px-6 py-3">
                       Age
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" className="px-6 py-3">
                       Sex
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" className="px-6 py-3">
                       Blood Group
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" className="px-6 py-3">
                       HB levels
                     </th>
                   </tr>

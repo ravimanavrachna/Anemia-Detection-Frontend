@@ -120,7 +120,7 @@ const AdminAllDonor = () => {
 
           
             {data&&data.map((donor, index) => (
-              <tr key={donor.id} onClick={() =>navigate(`/donor/donor-detail/${donor.donorId}`)} className="bg-white border-b hover:bg-gray-50">
+              <tr key={donor.donorId} onClick={() =>navigate(`/donor/donor-detail/${donor.donorId}`)} className="bg-white border-b hover:bg-gray-50">
                 <td className="px-6 py-4">{offset + index + 1}</td>
                 <td className="px-6 py-4">{donor.name || '-'}</td>
                 <td className="px-6 py-4">{donor.registrationDate || '-'}</td>

@@ -21,31 +21,33 @@ const InitialuserMedicalDetail = [
 ];
 const PatientDetail = () => {
   const { donorId } = useParams();
-  const { data,fetchdata } = useGet(`api/donor/${donorId}`);
-  const {patchData} =usePatch(`api/donor/hb`)
+  const { data, fetchdata } = useGet(`api/donor/${donorId}`);
+  const { patchData } = usePatch(`api/donor/hb`)
   const [UserPersonalDetails, SetUserPersonalDetails] = useState(
     InitialUserPersonalDetails
   );
   const [userMedicalDetail, SetuserMedicalDetail] = useState(
     InitialuserMedicalDetail
   );
-  const [nailbedImage, setNailbedImage] = useState("");
-  const [leftPalmImage, setLeftPalmImage] = useState("");
-  const [rightPalmImage, setRightPalmImage] = useState("");
-  const [leftEyeImage, setLeftEyeImage] = useState("");
-  const [rightEyeImage, setRightEyeImage] = useState("");
+  const [nailbedImage, setNailbedImage] = useState([]);
+  const [leftPalmImage, setLeftPalmImage] = useState(null);
+  const [rightPalmImage, setRightPalmImage] = useState(null);
+  const [leftEyeImage, setLeftEyeImage] = useState(null);
+  const [rightEyeImage, setRightEyeImage] = useState(null);
   const [finalResult, setFinalResult] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [hbValue, setHbValue] = useState("");
 
   useEffect(() => {
-    // console.log(data);
+    if (!data) {
+      return;
+    }
     setFinalResult(data?.final_prediction_3_models_combined?.prediction);
-    setNailbedImage(data?.detailed_results?.nail_analysis?.image);
-    setLeftPalmImage(data?.detailed_results?.palm_analysis?.left_palm?.image);
-    setRightPalmImage(data?.detailed_results?.palm_analysis?.right_palm?.image);
-    setLeftEyeImage(data?.detailed_results?.eye_analysis?.left_eye.image);
-    setRightEyeImage(data?.detailed_results?.eye_analysis?.right_eye.image);
+    setNailbedImage(data?.detailed_results?.nail_analysis?.individual_nails);
+    setLeftPalmImage(data?.detailed_results?.palm_analysis?.left_palm?.image_crop);
+    setRightPalmImage(data?.detailed_results?.palm_analysis?.right_palm?.image_crop);
+    setLeftEyeImage(data?.detailed_results?.eye_analysis?.left_eye.image_crop);
+    setRightEyeImage(data?.detailed_results?.eye_analysis?.right_eye.image_crop);
     SetUserPersonalDetails([
       { id: 1, title: "Name", value: data?.name },
       { id: 2, title: "Roll No. / Employee ID", value: data?.employeeId },
@@ -65,11 +67,11 @@ const PatientDetail = () => {
 
   const handleUpdate = async () => {
     try {
-      await patchData({HbValue:hbValue,_id:data?._id})
+      await patchData({ HbValue: hbValue, _id: data?._id })
       await fetchdata()
     } catch (error) {
       console.log(error);
-      
+
     }
     setShowModal(false);
   };
@@ -77,12 +79,12 @@ const PatientDetail = () => {
     <div>
       <PageTitle title={`${data?.name || "NA"} ${!data?.donorId || ""}`} />
 
-        <div
-          className="lg:hidden block w-full   rounded-full transform  bg-red-600 border-[1rem] border-[#F6EDED] text-white 
+      <div
+        className="lg:hidden block w-full   rounded-full transform  bg-red-600 border-[1rem] border-[#F6EDED] text-white 
           font-bold font-urbanist text-[1.5rem] flex items-center justify-center "
-        >
-          {finalResult}
-        </div>
+      >
+        {finalResult}
+      </div>
 
       <div className="relative mb-10">
         <div className="grid grid-cols-1 md:grid md:grid-cols-2 gap-10">
@@ -115,7 +117,7 @@ const PatientDetail = () => {
                 <button
                   onClick={() => setShowModal(true)}
                   type="button"
-                  class="text-white bg-gradient-to-r from-red-500 to-red-900 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+                  className="text-white bg-gradient-to-r from-red-500 to-red-900 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
                 >
                   {" "}
                   Add Hb Value
@@ -176,23 +178,15 @@ const PatientDetail = () => {
           <div className="bg-white rounded-lg h-[25rem]">
             <div className="p-4">
               <h1 className="text-[20px] font-bold text-center font-urbanist">
-                Left Palm 
+                Cropped Left Palm
               </h1>
             </div>
             <hr />
             <div className="flex h-[21rem] p-4 overflow-hidden">
-              <div className="flex justify-center items-center w-[49%]">
+              <div className="flex justify-center items-center w-full">
                 <img
                   src={leftPalmImage}
-                  alt="Palm"
-                  className="max-h-full object-contain"
-                />
-              </div>
-              <div className="w-[1px] border h-full"></div>
-              <div className="flex justify-center items-center w-[49%] pl-4">
-                <img
-                  src={rightPalmImage}
-                  alt="Nailbed"
+                  alt="Left Palm "
                   className="max-h-full object-contain"
                 />
               </div>
@@ -205,119 +199,102 @@ const PatientDetail = () => {
           <div className="bg-white rounded-lg h-[25rem]">
             <div className="p-4">
               <h1 className="text-[20px] text-center font-bold font-urbanist">
-                Right Palm
+                Cropped Right Palm
               </h1>
             </div>
             <hr />
             <div className="flex h-[21rem] p-4 overflow-hidden">
-              <div className="flex justify-center items-center w-[49%]">
+              <div className="flex justify-center items-center w-full">
                 <img
-                  src={leftEyeImage}
-                  alt="Left Eye"
+                  src={rightPalmImage}
+                  alt="Right Palm"
                   className="max-h-full object-contain"
                 />
               </div>
-              <div className="w-[1px] border h-full"></div>
-              <div className="flex justify-center items-center w-[49%] pl-4">
-                <img
-                  src={rightEyeImage}
-                  alt="Right Eye"
-                  className="max-h-full object-contain"
-                />
-              </div>
+
             </div>
           </div>
           {/* Nail Images */}
         </div>
 
         {/* Heartbeat Badge */}
-       <div className="hidden lg:block">
-         <div
-          className=" lg:absolute  rounded-full lg:w-[12rem] lg:h-[12rem] lg:rounded-full 
+        <div className="hidden lg:block">
+          <div
+            className=" lg:absolute  rounded-full lg:w-[12rem] lg:h-[12rem] lg:rounded-full 
           lg:top-1/2 lg:left-1/2 transform -translate-x-1/2 -translate-y-1/2
           bg-red-600 border-[1rem] border-[#F6EDED] text-white 
           font-bold font-urbanist text-[1.5rem] flex justify-center items-center 
           animate-heartbeat"
-        >
-          {finalResult}
+          >
+            {finalResult}
+          </div>
         </div>
-       </div>
       </div>
 
-<div className="grid grid-cols-1 lgL:grid lg:grid-cols-2 gap-10">
-                  <div className="bg-white rounded-lg h-[25rem]">
-            <div className="p-4">
-              <h1 className="text-[20px] font-bold text-center font-urbanist">
-                Left Eye
-              </h1>
-            </div>
-            <hr />
-            <div className="flex h-[21rem] p-4 overflow-hidden">
-              <div className="flex justify-center items-center w-[49%]">
-                <img
-                  src={leftPalmImage}
-                  alt="Palm"
-                  className="max-h-full object-contain"
-                />
-              </div>
-              <div className="w-[1px] border h-full"></div>
-              <div className="flex justify-center items-center w-[49%] pl-4">
-                <img
-                  src={rightPalmImage}
-                  alt="Nailbed"
-                  className="max-h-full object-contain"
-                />
-              </div>
+      <div className="grid grid-cols-1 lgL:grid lg:grid-cols-2 gap-10">
+        <div className="bg-white rounded-lg h-[25rem]">
+          <div className="p-4">
+            <h1 className="text-[20px] font-bold text-center font-urbanist">
+              Cropped Left Eye
+            </h1>
+          </div>
+          <hr />
+          <div className="flex h-[21rem] p-4 overflow-hidden">
+            <div className="flex justify-center items-center w-full">
+              <img
+                src={leftEyeImage}
+                alt="Left Eye"
+                className="max-h-full object-contain"
+              />
             </div>
           </div>
+        </div>
 
-          {/* Medical Details */}
+        {/* Medical Details */}
 
-          {/* Eyes Images */}
-          <div className="bg-white rounded-lg h-[25rem]">
-            <div className="p-4">
-              <h1 className="text-[20px] text-center font-bold font-urbanist">
-                Right Eye
-              </h1>
-            </div>
-            <hr />
-            <div className="flex h-[21rem] p-4 overflow-hidden">
-              <div className="flex justify-center items-center w-[49%]">
-                <img
-                  src={leftEyeImage}
-                  alt="Left Eye"
-                  className="max-h-full object-contain"
-                />
-              </div>
-              <div className="w-[1px] border h-full"></div>
-              <div className="flex justify-center items-center w-[49%] pl-4">
-                <img
-                  src={rightEyeImage}
-                  alt="Right Eye"
-                  className="max-h-full object-contain"
-                />
-              </div>
-            </div>
+        {/* Eyes Images */}
+        <div className="bg-white rounded-lg h-[25rem]">
+          <div className="p-4">
+            <h1 className="text-[20px] text-center font-bold font-urbanist">
+              Cropped Right Eye
+            </h1>
           </div>
+          <hr />
+          <div className="flex h-[21rem] p-4 overflow-hidden">
+            <div className="flex justify-center items-center w-full">
+              <img
+                src={rightEyeImage}
+                alt="Right Eye"
+                className="max-h-full object-contain"
+              />
+            </div>
 
-     
-</div>
+          </div>
+        </div>
 
- <div className="bg-white rounded-lg mt-10 h-[25rem]">
+
+      </div>
+
+      <div className="bg-white rounded-lg mt-10 h-[50rem]">
         <div className="p-4">
           <h1 className="text-[20px] text-center font-bold font-urbanist">
-            Nail Image
+            Cropped Nail Images
           </h1>
         </div>
         <hr />
-        <div className="flex h-[21rem] p-4 overflow-hidden">
-          <div className="flex justify-center items-center w-[49%]">
-            <img
-              src={nailbedImage}
-              alt="Nail"
-              className="max-h-full object-contain"
-            />
-          </div>
+        <div className="grid grid-cols-2 gap-4 justify-center h-[42rem] p-4 overflow-y-scroll">
+          {
+            nailbedImage.map((nail,i) => {
+              return <div key={i+"nail"} className="flex justify-center items-center ">
+                <img
+                  src={nail.image}
+                  alt="Nail"
+                  className="max-h-full object-contain"
+                />
+              </div>
+            })
+          }
+
           <div className="w-[1px] border h-full"></div>
         </div>
       </div>

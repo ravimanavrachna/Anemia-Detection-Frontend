@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Bell, Home, PlusCircle, Settings, Users } from "lucide-react";
 import LogOutModal from "../modal/LogOutModal";
 import { BellIcon1 } from "./IconsSVG";
@@ -52,7 +53,7 @@ export default function Sidebar() {
         {/* Navigation */}
         <nav className="space-y-2 flex-grow">
           {menuItems.map((item, index) => (
-            <div
+            <motion.div
               key={item.path}
               onClick={() => navigate(item.path)}
               onMouseEnter={() => setHovered(index)}
@@ -67,7 +68,7 @@ export default function Sidebar() {
             >
               <span className="text-lg">{item.icon}</span>
               <span>{item.name}</span>
-            </div>
+            </motion.div>
           ))}
         </nav>
 
