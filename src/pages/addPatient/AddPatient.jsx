@@ -26,7 +26,6 @@ const AddPatient = () => {
     ageGroup: "",
     sex: "male",
     employeeId: "1212",
-    height: "23",
     weight: "23",
     bloodGroup: "A+",
     doctorName: "",
@@ -65,14 +64,8 @@ const bloodGroupHandler=(value)=>{
           {[
             { label: "Name", name: "name" },
             { label: "Roll No. / Employee ID", name: "employeeId" },
-            {
-              label: "Height",
-              name: "height",
-              placeholder: `Feet'inches" / cm,`
-            },
             { label: "DOB", name: "dob", type: "date" },
             { label: "Weight", name: "weight", placeholder: "Kg" },
-            // { label: "Blood Group", name: "bloodGroup" },
             { label: "Mobile Number", name: "mobileNo" },
           ].map(({ label, name, type = "text", placeholder = "" }) => (
             <div key={name}>
