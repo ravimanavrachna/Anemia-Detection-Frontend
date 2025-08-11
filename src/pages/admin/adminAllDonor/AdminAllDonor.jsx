@@ -1,31 +1,71 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import useGet from '../../../hooks/useGet';
 import PageTitle from '../../../componants/PageTitle';
 import Pagination from '../../../componants/Pagination';
 import { calculateAge } from '../../../utils/dateFormatter';
+// Example (React)
+import axios from "axios";
+import { apiHost } from '../../../config';
+
+
 
 const AdminAllDonor = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState('Last 30 days');
- const navigate = useNavigate()
+  const [selectedDoctor, setSelectedDoctor] = useState({name:"All",doctorID:null});
+  const [doctorList,setDoctorList]=useState([])
+  const navigate = useNavigate()
 
 
   const limit = pageSize;
   const offset = (currentPage - 1) * pageSize;
-//   const { data } = useGet(`api/donor/list?limit=${limit}&offset=${offset}`);
-  const { data } = useGet(`api/admin/donor/list`);
+  //   const { data } = useGet(`api/donor/list?limit=${limit}&offset=${offset}`);
+  const { data ,fetchdata:fetchDonorList} = useGet(`api/admin/donor/list`);
+  const {data:doctorData,} = useGet(`api/admin/doctor/list`);
+
   const donors = data?.donors?.donorList || [];
 
   const searchedDonors = donors.filter((donor) =>
     donor.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const paginatedDonors = searchedDonors.slice(offset, offset + limit);
-// console.log(data);
+  // console.log(data);
+  const downloadCSV = async () => {
+    try {
+      const token = sessionStorage.getItem("authToken");
 
+      const response = await axios.get(`${apiHost}/api/donor/exportcsv`, {
+        // responseType: "blob",
+        params: { doctorID:selectedDoctor.doctorID  },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      );
+      // console.log({response});
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "donors.csv");
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.error("CSV download failed", error);
+    }
+  };
+  useEffect(()=>{
+    if(!doctorData) return;    
+      setDoctorList(doctorData.doctors);
+    
+  },[doctorData])
+  const changeSelctedDoctorHandler=(doctor)=>{
+    fetchDonorList({query:{doctorID:doctor.doctorID}})
+    setSelectedDoctor(doctor);
+    setDropdownOpen(false);
+  }
   return (
     <div>
       <PageTitle title="All Donor" />
@@ -34,6 +74,7 @@ const AdminAllDonor = () => {
         <div className="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0  sm:items-center justify-between pb-4">
           {/* Filter Dropdown */}
           <div className="relative">
+
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
               className="inline-flex items-center text-gray-500 bg-white border border-gray-300 rounded-lg text-sm px-3 py-1.5"
@@ -41,7 +82,7 @@ const AdminAllDonor = () => {
               <svg className="w-3 h-3 me-3" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
               </svg>
-              {selectedFilter}
+              {selectedDoctor.name}
               <svg className="w-2.5 h-2.5 ms-2.5" fill="none" viewBox="0 0 10 6">
                 <path
                   stroke="currentColor"
@@ -52,27 +93,45 @@ const AdminAllDonor = () => {
                 />
               </svg>
             </button>
-
+            <button
+              onClick={() => downloadCSV()}
+              className="inline-flex items-center text-gray-500 bg-white border border-gray-300 rounded-lg text-sm px-3 py-1.5"
+            >DOWNLOAD</button>
             {dropdownOpen && (
               <div className="absolute z-10 mt-2 w-48 bg-white rounded-lg shadow-sm">
                 <ul className="p-3 space-y-1 text-sm text-gray-700">
-                  {['Last day', 'Last 7 days', 'Last 30 days', 'Last month', 'Last year'].map(
-                    (option, index) => (
-                      <li key={index}>
+                  <li >
                         <div
                           onClick={() => {
-                            setSelectedFilter(option);
-                            setDropdownOpen(false);
+                           changeSelctedDoctorHandler({name:"All",doctorID:null})
                           }}
                           className="flex items-center p-2 rounded-sm hover:bg-gray-100 cursor-pointer"
                         >
                           <input
                             type="radio"
-                            checked={selectedFilter === option}
+                            checked={selectedDoctor === "All"}
                             className="w-4 h-4 text-blue-600"
                             readOnly
                           />
-                          <label className="w-full ms-2 text-sm font-medium">{option}</label>
+                          <label className="w-full ms-2 text-sm font-medium">{"All"}</label>
+                        </div>
+                      </li>
+                  {doctorList.map(
+                    (doctor, index) => (
+                      <li key={index}>
+                        <div
+                          onClick={() => {
+                           changeSelctedDoctorHandler(doctor)
+                          }}
+                          className="flex items-center p-2 rounded-sm hover:bg-gray-100 cursor-pointer"
+                        >
+                          <input
+                            type="radio"
+                            checked={selectedDoctor === doctor.name}
+                            className="w-4 h-4 text-blue-600"
+                            readOnly
+                          />
+                          <label className="w-full ms-2 text-sm font-medium">{doctor.name}</label>
                         </div>
                       </li>
                     )
@@ -102,38 +161,38 @@ const AdminAllDonor = () => {
           </div>
         </div>
 
-       <div className='w-full overflow-x-auto'>
-         <table className="w-full  text-sm text-left text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-            <tr>
-              <th className="p-4">S. No.</th>
-              <th className="px-6 py-3">Patient Name</th>
-              <th className="px-6 py-3">Date</th>
-              <th className="px-6 py-3">Donor ID</th>
-              <th className="px-6 py-3">Age</th>
-              <th className="px-6 py-3">Sex</th>
-              <th className="px-6 py-3">Blood Group</th>
-              <th className="px-6 py-3">HB Levels</th>
-            </tr>
-          </thead>
-          <tbody>
-
-          
-            {data&&data.map((donor, index) => (
-              <tr key={donor.id} onClick={() =>navigate(`/donor/donor-detail/${donor.donorId}`)} className="bg-white border-b hover:bg-gray-50">
-                <td className="px-6 py-4">{offset + index + 1}</td>
-                <td className="px-6 py-4">{donor.name || '-'}</td>
-                <td className="px-6 py-4">{donor.registrationDate || '-'}</td>
-                <td className="px-6 py-4">{donor.donorId || '-'}</td>
-                <td className="px-6 py-4">{calculateAge(donor.dob) || '-'}</td>
-                <td className="px-6 py-4">{donor.sex || '-'}</td>
-                <td className="px-6 py-4">{donor.bloodGroup || '-'}</td>
-                <td className="px-6 py-4">{donor.hBValue || '-'}</td>
+        <div className='w-full overflow-x-auto'>
+          <table className="w-full  text-sm text-left text-gray-500">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                <th className="p-4">S. No.</th>
+                <th className="px-6 py-3">Patient Name</th>
+                <th className="px-6 py-3">Date</th>
+                <th className="px-6 py-3">Donor ID</th>
+                <th className="px-6 py-3">Model Result</th>
+                <th className="px-6 py-3">HB result</th>
+                {/* <th className="px-6 py-3">Blood Group</th> */}
+                <th className="px-6 py-3">HB Levels</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-       </div>
+            </thead>
+            <tbody>
+
+
+              {data && data.map((donor, index) => (
+                <tr key={donor.donorId} onClick={() => navigate(`/donor/donor-detail/${donor.donorId}`)} className="bg-white border-b hover:bg-gray-50">
+                  <td className="px-6 py-4">{offset + index + 1}</td>
+                  <td className="px-6 py-4">{donor.name || '-'}</td>
+                  <td className="px-6 py-4">{donor.registrationDate || '-'}</td>
+                  <td className="px-6 py-4">{donor.donorId || '-'}</td>
+                  <td className="px-6 py-4">{donor.final_prediction_3_models_combined.prediction || '-'}</td>
+                  <td className="px-6 py-4">{donor.HbValue ? donor.HbValue > 12 ? "non_anemic" : "anemic" : "Not Provided"}</td>
+                  {/* <td className="px-6 py-4">{donor.bloodGroup || '-'}</td> */}
+                  <td className="px-6 py-4">{donor.HbValue || 'Not provided'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         <Pagination
           currentPage={currentPage}

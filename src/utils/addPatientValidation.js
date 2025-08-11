@@ -8,9 +8,6 @@ export const addPatientDetailsValidation = (data) => {
 
     if (!data.employeeId?.trim()) errors.employeeId = "Employee ID is required";
 
-    if (!data.height?.trim()) {
-        errors.height = "Height is required";
-    }
     if (!data.dob) errors.dob = "Date of birth is required";
 
     if (!data.weight) {

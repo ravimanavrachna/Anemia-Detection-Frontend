@@ -23,7 +23,7 @@ const BloodGroupDonutChart = ({categories=["A+", "A-", "B+", "B-", "O+", "O-", "
     <div className="">
       <h2 className="text-xl font-semibold text-gray-800 text-start mb-4">Blood Group Distribution</h2>
       <ApexCharts options={options} series={series} type="donut" height={330} />
-      <p className="text-lg font-medium mt-4 text-center">Total people: 400</p>
+      <p className="text-lg font-medium mt-4 text-center">Total people: {data.reduce((acc, curr) => acc + curr, 0)}</p>
     </div>
   );
 };
