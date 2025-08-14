@@ -9,6 +9,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Check secrets
+        run: |
+          if [ -z "${{ secrets.VPS_HOST }}" ] || [ -z "${{ secrets.VPS_USER }}" ] || [ -z "${{ secrets.VPS_SSH_KEY }}" ]; then
+            echo "❌ VPS_HOST, VPS_USER or VPS_SSH_KEY is missing in GitHub Secrets."
+            exit 1
+          fi
+
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -16,10 +23,20 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
+            set -e
+            echo "🚀 Deploying Frontend..."
+
             cd /Anemia-Detection-Frontend
-            git pull
+            git fetch --all
+            git reset --hard origin/main
             npm install
+
+            echo "🗑 Removing old build..."
+            rm -rf build
+
+            echo "⚙️ Building frontend..."
             npm run build
+
             sudo nginx -t
             sudo systemctl reload nginx
-            # cp -r build/* /var/www/html   # Agar nginx se serve kar rahe ho
+            echo "✅ Frontend deployed successfully!"
