@@ -42,13 +42,13 @@ const StepOne = () => {
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-end mt-10 px-6">
+      {/* <div className="flex justify-end mt-10 px-6"> */}
         <StepNavButtons
           nextEvent={nextEventHandler}
           nextUrl="/donor/add-donor/upload-conjunctiva-image"
           prevUrl="/donor/add-donor"
         />
-      </div>
+      {/* </div> */}
     </div>
   );
 };
