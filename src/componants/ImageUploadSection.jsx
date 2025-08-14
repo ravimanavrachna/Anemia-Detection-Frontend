@@ -50,9 +50,9 @@ const ImageUploadSection = ({ title, img, name, saveImage, onApiCall, error }) =
             {/* Upload Box */}
             <label className="flex hidden lg:block flex-col items-center justify-center border-2 border-dashed border-red-400 rounded-xl p-5 w-64 h-56 cursor-pointer hover:bg-red-50 transition-all">
               <img
-                src="/images/hand-placeholder.png"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcIoTB0jfB7dxKYYMzcMqVCuqCd98pprI5i2n8RfbcyEzLZtbHuy-y8ERecfnkqqTe6vs&usqp=CAU"
                 alt="Upload Preview"
-                className="w-24 h-24 object-contain mb-3"
+                className="w-20 h-20 m-auto mt-4 object-contain mb-3"
               />
               <span className="text-sm font-medium text-gray-800">Drag & Drop</span>
               <span className="text-xs text-red-500">OR</span>
