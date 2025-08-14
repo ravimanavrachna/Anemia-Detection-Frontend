@@ -40,7 +40,7 @@ export default function Sidebar() {
     <div className="h-full overflow-hidden">
       <div className="flex items-center mb-8 justify-center">
         <h1 className="text-[2rem] font-bold my-5 font-urbanist text-pink-600">
-          AnemoScan pink
+          AnemoScan update 2.0
         </h1>
       </div>
 
