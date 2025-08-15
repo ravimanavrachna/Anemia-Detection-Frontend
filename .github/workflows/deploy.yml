@@ -20,7 +20,7 @@ jobs:
             rm -rf build
             git reset --hard
             git pull
-            npm install --legacy-peer-deps
+            npm install 
             npm run build
             sudo nginx -t
             sudo systemctl reload nginx
