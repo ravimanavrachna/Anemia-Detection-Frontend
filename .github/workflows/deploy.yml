@@ -16,7 +16,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /Anemia-Detection-Frontend
+            cd /root/Anemia-Detection-Frontend
             ls
             rm -rf build
             git pull origin main
